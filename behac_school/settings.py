@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from webbrowser import get
-from dotenv import load_dotenv
-
-load_dotenv()
+def get_env(var_name, default=None):
+    return os.environ.get(var_name, default)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -89,25 +88,14 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'behac',
-#         'USER': 'behac',
-#         'PASSWORD': 'behac@123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
+#         'ENGINE': get_env('DB_ENGINE', 'django.db.backends.postgresql'),
+#         'NAME': get_env('DB_NAME', 'pejuni_db'),
+#         'USER': get_env('DB_USER', ''),
+#         'PASSWORD': get_env('DB_PASSWORD', ''),
+#         'HOST': get_env('DB_HOST', 'localhost'),
+#         'PORT': get_env('DB_PORT', '5432'),
 #     }
 # }
-
-DATABASES = {
-    'default': {
-        'ENGINE': get_env('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': get_env('DB_NAME', 'pejuni_db'),
-        'USER': get_env('DB_USER', ''),
-        'PASSWORD': get_env('DB_PASSWORD', ''),
-        'HOST': get_env('DB_HOST', 'localhost'),
-        'PORT': get_env('DB_PORT', '5432'),
-    }
-}
 
 
 # Password validation
