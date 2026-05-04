@@ -28,8 +28,7 @@ SECRET_KEY = get_env('SECRET_KEY', 'your-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env('DEBUG', 'True')
-
-ALLOWED_HOSTS = [get_env('ALLOWED_HOSTS', 'localhost').split(',')]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
