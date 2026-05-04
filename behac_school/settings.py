@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables
 env_file = os.getenv('DJANGO_ENV_FILE', '.env')
 if (BASE_DIR / env_file).exists():
-    load_dotenv(BASE_DIR / env_file)
+    # load_dotenv(BASE_DIR / env_file)
     print(f"Loaded environment from {env_file}")
 
 # Helper function to get env variables
