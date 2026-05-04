@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env_file = os.getenv('DJANGO_ENV_FILE', '.env')
 if (BASE_DIR / env_file).exists():
     load_dotenv(BASE_DIR / env_file)
-    # print(f"Loaded environment from {env_file}"):
+    print(f"Loaded environment from {env_file}")
 
 # Helper function to get env variables
 def get_env(key, default=None):
@@ -98,6 +98,7 @@ DATABASES = {
     }
 }
 
+print("Database configuration:", DATABASES['default'])
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
