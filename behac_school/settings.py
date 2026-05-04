@@ -79,23 +79,23 @@ WSGI_APPLICATION = 'behac_school.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': get_env('DB_ENGINE', 'django.db.backends.postgresql'),
-#         'NAME': get_env('DB_NAME', 'pejuni_db'),
-#         'USER': get_env('DB_USER', ''),
-#         'PASSWORD': get_env('DB_PASSWORD', ''),
-#         'HOST': get_env('DB_HOST', 'localhost'),
-#         'PORT': get_env('DB_PORT', '5432'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': get_env('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': get_env('DB_NAME', 'pejuni_db'),
+        'USER': get_env('DB_USER', ''),
+        'PASSWORD': get_env('DB_PASSWORD', ''),
+        'HOST': get_env('DB_HOST', 'localhost'),
+        'PORT': get_env('DB_PORT', '5432'),
+    }
+}
 
 
 # Password validation
