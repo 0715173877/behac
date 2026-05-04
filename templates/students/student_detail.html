@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block extra_head %}
+<style>
+@media print {
+    .sidebar, .sidebar-toggle, .navbar, .main-footer,
+    .page-header div a, .alert, .btn-behac, .toast, .alert-info {
+        display: none !important;
+    }
+    .main-content { margin-left: 0 !important; padding: 0 !important; }
+    .container-fluid { max-width: 100% !important; padding: 0 !important; }
+    .card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; }
+    .card-header { background-color: #f0f0f0 !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page-header { border-bottom: 2px solid #333; }
+    .page-header h2 { font-size: 24px; color: #000 !important; }
+    .page-header div { display: none !important; }
+    .accordion-button { padding: 5px 10px; font-size: 14px; border: none !important; background: #e9ecef !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .accordion-button:after { display: none !important; }
+    .accordion-collapse { display: block !important; }
+    .badge { border: 1px solid #333 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .bg-success, .btn-success { background-color: #28a745 !important; }
+    .bg-warning, .btn-warning { background-color: #ffc107 !important; }
+    .bg-info { background-color: #17a2b8 !important; }
+    .bg-primary, .btn-primary { background-color: #007bff !important; }
+    .table { font-size: 12px; }
+    .table th { background-color: #f8f9fa !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .row { display: flex; flex-wrap: wrap; }
+    .col-md-4 { width: 33.33%; float: left; padding: 0 10px; }
+    body { font-family: 'Times New Roman', serif; font-size: 12pt; color: #000; }
+    @page { margin: 15mm; size: A4 portrait; }
+    .no-print { display: none !important; }
+    a { color: #000 !important; text-decoration: none !important; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-user-graduate"></i> {{ student.full_name }}</h2>
+        <div class="no-print">
+            <a href="{% url 'students:update' student.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+            {% if user.is_superuser or 'Admin' in user.groups.all|join:', ' %}
+            <a href="{% url 'students:delete' student.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+            {% endif %}
+            <a href="{% url 'students:list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row g-2 mb-3">
+        <div class="col-md-3"><div class="card bg-success text-white text-center py-2"><small>Class</small><strong>{{ student.current_class.name }}</strong></div></div>
+        <div class="col-md-3"><div class="card bg-info text-white text-center py-2"><small>Exams</small><strong>{{ results|length }}</strong></div></div>
+        <div class="col-md-3"><div class="card bg-warning text-dark text-center py-2"><small>Paid</small><strong>TZS {{ total_paid|floatformat:2|intcomma }}</strong></div></div>
+        <div class="col-md-3"><div class="card bg-primary text-white text-center py-2"><small>Status</small><strong>{% if student.is_active %}<i class="fas fa-check-circle"></i> Active{% else %}Inactive{% endif %}</strong></div></div>
+    </div>
+
+    <div class="row">
+        <!-- LEFT: Personal Info -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white"><i class="fas fa-user"></i> Personal Info</div>
+                <div class="card-body py-2">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr><td class="text-muted">Reg No:</td><td><code>{{ student.registration_number }}</code></td></tr>
+                        <tr><td class="text-muted">DOB:</td><td>{{ student.date_of_birth|date:"d M Y" }}</td></tr>
+                        <tr><td class="text-muted">Age:</td><td>{{ student.age|default:"-" }} yrs</td></tr>
+                        <tr><td class="text-muted">Gender:</td><td>{{ student.get_gender_display }}</td></tr>
+                        <tr><td class="text-muted">Religion:</td><td>{{ student.religion|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">NIDA:</td><td>{{ student.nida|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Birth Cert:</td><td>{{ student.birth_cert_number }}</td></tr>
+                        <tr><td class="text-muted">Registered:</td><td>{{ student.registration_date|date:"d M Y" }}</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white"><i class="fas fa-map-marker-alt"></i> Location</div>
+                <div class="card-body py-2">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr><td class="text-muted">Region:</td><td>{{ student.region|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">District:</td><td>{{ student.district|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Street:</td><td>{{ student.street|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Mobile:</td><td>{{ student.mobile|default:"-" }}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDLE: Parent -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white"><i class="fas fa-user-friends"></i> Parent/Guardian</div>
+                <div class="card-body py-2">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr><td class="text-muted">Name:</td><td>{{ student.parent_name }}</td></tr>
+                        <tr><td class="text-muted">Mobile:</td><td>{{ student.parent_mobile }}</td></tr>
+                        <tr><td class="text-muted">Occupation:</td><td>{{ student.parent_occupation|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Parent NIDA:</td><td>{{ student.parent_nida|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Username:</td><td>{% if student.parent_user %}{{ student.parent_user.username }}{% else %}<span class="text-warning">Not created</span>{% endif %}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Other Relatives -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white"><i class="fas fa-users"></i> Other Relatives</div>
+                <div class="card-body py-2">
+                    {% if other_relatives %}
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Name</th><th>Relation</th><th>Mobile</th></tr></thead>
+                        <tbody>
+                            {% for rel in other_relatives %}
+                            <tr><td>{{ rel.name }}</td><td>{{ rel.relationship.name }}</td><td>{{ rel.mobile }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}<p class="text-muted mb-0">No other relatives registered.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>  <!-- End 3-column row -->
+
+    <!-- ============ 1. ACADEMIC PROGRESS - EXAM RESULTS BY YEAR ============ -->
+    <div class="card mb-3">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-chart-line"></i> Academic Progress - Results</span>
+            <button class="btn btn-sm btn-light no-print" onclick="window.print()"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+        <div class="card-body">
+            {% if progress_years %}
+            <div class="accordion" id="progressAccordion">
+                {% for yr_name, yr_data in progress_years.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#year{{ forloop.counter }}">
+                            <i class="fas fa-calendar-alt me-2"></i> Academic Year {{ yr_name }}
+                            <span class="badge bg-success ms-2">{{ yr_data.terms|length }} term(s)</span>
+                        </button>
+                    </h2>
+                    <div id="year{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body p-2">
+                            {% for term_name, term_data in yr_data.terms.items %}
+                            <h6 class="border-bottom pb-1 mt-2"><i class="fas fa-calendar-week text-info"></i> {{ term_name }} <span class="badge bg-secondary">{{ term_data.results|length }} exam(s)</span></h6>
+                            {% if term_data.results %}
+                            <table class="table table-sm table-bordered table-hover">
+                                <thead class="table-light"><tr><th>Exam</th><th>Subject</th><th>Marks</th><th>Max</th><th>Grade</th><th>Comment</th></tr></thead>
+                                <tbody>
+                                    {% for r in term_data.results %}
+                                    <tr>
+                                        <td>{{ r.exam.name }}</td>
+                                        <td>{{ r.subject.name }}</td>
+                                        <td><strong>{{ r.marks_obtained }}</strong></td>
+                                        <td>{{ r.exam.max_marks }}</td>
+                                        <td><span class="badge bg-{% if r.grade == 'A' %}success{% elif r.grade == 'B' %}primary{% elif r.grade == 'C' %}warning{% elif r.grade == 'D' %}info{% else %}danger{% endif %}">{{ r.grade }}</span></td>
+                                        <td><small>{{ r.teacher_comment|truncatewords:8|default:"-" }}</small></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}<p class="text-muted small">No results for this term.</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted"><i class="fas fa-info-circle"></i> No exam results recorded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ============ 2. PAYMENTS BY ACADEMIC YEAR ============ -->
+    <div class="card mb-3">
+        <div class="card-header bg-warning text-dark"><i class="fas fa-money-bill-wave"></i> Payments by Academic Year</div>
+        <div class="card-body">
+            {% if payments_by_year %}
+            <div class="accordion" id="paymentAccordion">
+                {% for yr_name, yr_pay in payments_by_year.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payYear{{ forloop.counter }}">
+                            <i class="fas fa-calendar-alt me-2"></i> {{ yr_name }}
+                            <span class="badge bg-success ms-2">{{ yr_pay.total }}</span>
+                        </button>
+                    </h2>
+                    <div id="payYear{{ forloop.counter }}" class="accordion-collapse collapse">
+                        <div class="accordion-body p-1">
+                            <table class="table table-sm mb-0">
+                                <thead><tr><th>Date</th><th>Category</th><th>Amount</th><th>Receipt</th></tr></thead>
+                                <tbody>
+                                    {% for p in yr_pay.payments %}
+                                    <tr>
+                                        <td>{{ p.payment_date|date:"d/m/Y" }}</td>
+                                        <td>{{ p.fee_category.name|truncatewords:3 }}</td>
+                                        <td><strong>TZS {{ p.amount_paid|floatformat:2|intcomma }}</strong></td>
+                                        <td><code>{{ p.receipt_number }}</code> <a href="{% url 'finance:receipt_pdf' p.pk %}" target="_blank"><i class="fas fa-print text-info"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <strong>Total Overall: TZS {{ total_paid|floatformat:2|intcomma }}</strong>
+            {% else %}<p class="text-muted">No payments recorded.</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- ============ 3. BEHAVIOR HISTORY BY ACADEMIC YEAR ============ -->
+    {% if behavior_years %}
+    <div class="card mb-3">
+        <div class="card-header bg-warning text-dark"><i class="fas fa-exclamation-triangle"></i> Behavior History by Academic Year</div>
+        <div class="card-body">
+            <div class="accordion" id="behaviorAccordion">
+                {% for yr_name, beh_list in behavior_years.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#behYear{{ forloop.counter }}">
+                            <i class="fas fa-calendar-alt me-2"></i> {{ yr_name }}
+                            <span class="badge bg-warning text-dark ms-2">{{ beh_list|length }} record(s)</span>
+                        </button>
+                    </h2>
+                    <div id="behYear{{ forloop.counter }}" class="accordion-collapse collapse">
+                        <div class="accordion-body p-2">
+                            <table class="table table-sm">
+                                <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Action</th><th>Resolved</th></tr></thead>
+                                <tbody>
+                                    {% for b in beh_list %}
+                                    <tr>
+                                        <td>{{ b.date|date:"d M Y" }}</td>
+                                        <td>{% if b.behavior_type == 'POS' %}<span class="badge bg-success"><i class="fas fa-thumbs-up"></i> Positive</span>{% else %}<span class="badge bg-danger"><i class="fas fa-thumbs-down"></i> Negative</span>{% endif %}</td>
+                                        <td>{{ b.description|truncatewords:8 }}</td>
+                                        <td>{{ b.action_taken|default:"-" }}</td>
+                                        <td>{% if b.resolved %}<i class="fas fa-check-circle text-success"></i> Yes{% else %}<i class="fas fa-clock text-warning"></i> No{% endif %}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ============ 4. ACHIEVEMENTS BY ACADEMIC YEAR ============ -->
+    {% if achievements %}
+    <div class="card mb-3">
+        <div class="card-header bg-success text-white"><i class="fas fa-trophy"></i> Achievements by Academic Year</div>
+        <div class="card-body">
+            <div class="accordion" id="achievementAccordion">
+                {% for yr_name, yr_data in achievement_years.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#achYear{{ forloop.counter }}">
+                            <i class="fas fa-calendar-alt me-2"></i> {{ yr_name }}
+                            <span class="badge bg-success ms-2">{{ yr_data.achievements|length }} achievement(s)</span>
+                        </button>
+                    </h2>
+                    <div id="achYear{{ forloop.counter }}" class="accordion-collapse collapse">
+                        <div class="accordion-body p-2">
+                            <table class="table table-sm">
+                                <thead><tr><th>Title</th><th>Date</th><th>Description</th></tr></thead>
+                                <tbody>
+                                    {% for a in yr_data.achievements %}
+                                    <tr>
+                                        <td><strong>{{ a.title }}</strong></td>
+                                        <td>{{ a.date_awarded|date:"d M Y" }}</td>
+                                        <td>{{ a.description|default:"-" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>  <!-- End container-fluid -->
+{% endblock %}

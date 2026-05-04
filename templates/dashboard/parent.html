@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@media print {
+    .sidebar, .sidebar-toggle, .navbar, .main-footer, .no-print { display: none !important; }
+    .main-content { margin-left: 0 !important; padding: 0 !important; }
+}
+.chart-container { position: relative; height: 200px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h2><i class="fas fa-user-graduate text-success"></i> My Child's Progress</h2>
+        <button class="btn btn-sm btn-light no-print" onclick="window.print()"><i class="fas fa-download"></i> Download PDF</button>
+    </div>
+
+    <!-- Welcome & Student Selector -->
+    {% with students=students student=student %}
+    {% include 'dashboard/_child_selector.html' %}
+    {% endwith %}
+
+    <!-- KPI Cards -->
+    <div class="row g-2 mb-3">
+        <div class="col-md-2 col-6">
+            <div class="card bg-success text-white text-center py-2">
+                <small>Results</small>
+                <h4 class="mb-0">{{ results|length }}</h4>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card bg-info text-white text-center py-2">
+                <small>Payments</small>
+                <h4 class="mb-0">{{ payments|length }}</h4>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card {% if balance > 0 %}bg-danger{% else %}bg-success{% endif %} text-white text-center py-2">
+                <small>Balance</small>
+                <h4 class="mb-0">TZS {{ balance|floatformat:2|intcomma }}</h4>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card bg-warning text-dark text-center py-2">
+                <small>Behavior</small>
+                <h4 class="mb-0">{{ behavior|length }}</h4>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card bg-primary text-white text-center py-2">
+                <small>Attendance</small>
+                <h4 class="mb-0">{{ attendance|length }}d</h4>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="card bg-secondary text-white text-center py-2">
+                <small>Assignments</small>
+                <h4 class="mb-0">{{ assignments|length }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-2 mb-3">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><i class="fas fa-chart-bar"></i> Fee Payments by Month</div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="feeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><i class="fas fa-chart-pie"></i> Attendance Summary</div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="attendanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Personal Info -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white"><i class="fas fa-user"></i> Personal Info</div>
+                <div class="card-body py-2">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr><td class="text-muted">Name:</td><td><strong>{{ student.full_name }}</strong></td></tr>
+                        <tr><td class="text-muted">Reg No:</td><td><code>{{ student.registration_number }}</code></td></tr>
+                        <tr><td class="text-muted">Class:</td><td>{{ student.current_class.name|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">DOB:</td><td>{{ student.date_of_birth|date:"d M Y" }}</td></tr>
+                        <tr><td class="text-muted">Gender:</td><td>{{ student.get_gender_display }}</td></tr>
+                        <tr><td class="text-muted">Religion:</td><td>{{ student.religion|default:"-" }}</td></tr>
+                        <tr><td class="text-muted">Address:</td><td>{{ student.street|default:"-" }}, {{ student.region|default:"-" }}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Info with Outstanding -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white"><i class="fas fa-money-bill-wave"></i> Fee Status</div>
+                <div class="card-body py-2">
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr><td class="text-muted">Expected Fee:</td><td><strong>TZS {{ expected_fee|floatformat:2|intcomma }}</strong></td></tr>
+                        <tr><td class="text-muted">Total Paid:</td><td><strong>TZS {{ total_paid|floatformat:2|intcomma }}</strong></td></tr>
+                        <tr>
+                            <td class="text-muted">Balance:</td>
+                            <td>
+                                {% if balance > 0 %}
+                                    <strong class="text-danger">TZS {{ balance|floatformat:2|intcomma }} (Due)</strong>
+                                {% else %}
+                                    <strong class="text-success">N0.00 (Cleared)</strong>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <h6><i class="fas fa-history"></i> Payment History</h6>
+                    {% if payments %}
+                    <table class="table table-sm">
+                        <thead><tr><th>Date</th><th>Category</th><th>Amount</th><th>Receipt</th></tr></thead>
+                        <tbody>
+                            {% for p in payments %}
+                            <tr>
+                                <td>{{ p.payment_date|date:"d/m/Y" }}</td>
+                                <td>{{ p.fee_category.name }}</td>
+                                <td><strong>TZS {{ p.amount_paid|floatformat:2|intcomma }}</strong></td>
+                                <td><code>{{ p.receipt_number }}</code></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted"><i class="fas fa-info-circle"></i> No payments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Behavior Summary -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-warning text-dark"><i class="fas fa-exclamation-triangle"></i> Behavior Records</div>
+                <div class="card-body py-2">
+                    {% if behavior %}
+                    <table class="table table-sm">
+                        <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Resolved</th></tr></thead>
+                        <tbody>
+                            {% for b in behavior|slice:":10" %}
+                            <tr>
+                                <td>{{ b.date|date:"d/m/Y" }}</td>
+                                <td>{% if b.behavior_type == 'POS' %}<span class="badge bg-success">+</span>{% else %}<span class="badge bg-danger">-</span>{% endif %}</td>
+                                <td><small>{{ b.description|truncatewords:6 }}</small></td>
+                                <td>{% if b.resolved %}<i class="fas fa-check-circle text-success"></i>{% else %}<i class="fas fa-clock text-warning"></i>{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}<p class="text-muted">No behavior records.</p>{% endif %}
+                </div>
+            </div>
+            <!-- Achievements -->
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white"><i class="fas fa-trophy"></i> Achievements</div>
+                <div class="card-body py-2">
+                    {% if achievements %}
+                    <table class="table table-sm">
+                        <thead><tr><th>Title</th><th>Date</th></tr></thead>
+                        <tbody>
+                            {% for a in achievements %}
+                            <tr>
+                                <td><i class="fas fa-award text-warning"></i> <strong>{{ a.title }}</strong></td>
+                                <td>{{ a.date_awarded|date:"d/m/Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}<p class="text-muted">No achievements yet.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Progress Report by Academic Year -->
+    <div class="card mb-3">
+        <div class="card-header bg-dark text-white"><i class="fas fa-chart-line"></i> Academic Progress by Year</div>
+        <div class="card-body">
+            <h6 class="text-muted mb-2"><i class="fas fa-calendar-alt"></i> Current Academic Year</h6>
+            {% if progress_current %}
+            <div class="accordion" id="parentCurrentAccordion">
+                {% for term_name, term_results in progress_current.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#pterm{{ forloop.counter }}">
+                            <i class="fas fa-calendar-week me-2"></i> {{ term_name }} <span class="badge bg-secondary ms-2">{{ term_results|length }} exam(s)</span>
+                        </button>
+                    </h2>
+                    <div id="pterm{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body p-2">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light"><tr><th>Exam</th><th>Subject</th><th>Marks</th><th>Max</th><th>Grade</th><th>Comment</th></tr></thead>
+                                <tbody>
+                                    {% for r in term_results %}
+                                    <tr>
+                                        <td>{{ r.exam.name }}</td>
+                                        <td>{{ r.subject.name }}</td>
+                                        <td><strong>{{ r.marks_obtained }}</strong></td>
+                                        <td>{{ r.exam.max_marks }}</td>
+                                        <td><span class="badge bg-{% if r.grade == 'A' %}success{% elif r.grade == 'B' %}primary{% elif r.grade == 'C' %}warning{% elif r.grade == 'D' %}info{% else %}danger{% endif %}">{{ r.grade }}</span></td>
+                                        <td><small>{{ r.teacher_comment|default:"-" }}</small></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted"><i class="fas fa-info-circle"></i> No exam results for current year yet.</p>
+            <a href="{% url 'dashboard:parent_progress' %}" class="btn btn-sm btn-behac"><i class="fas fa-history"></i> View Full Progress</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Attendance & Assignments -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white"><i class="fas fa-calendar-check"></i> Attendance Records</div>
+                <div class="card-body">
+                    {% if attendance %}
+                    <table class="table table-sm">
+                        <thead><tr><th>Date</th><th>Status</th></tr></thead>
+                        <tbody>
+                            {% for a in attendance %}
+                            <tr>
+                                <td>{{ a.date|date:"d M Y" }}</td>
+                                <td>{% if a.status == 'P' %}<span class="badge bg-success">Present</span>{% elif a.status == 'A' %}<span class="badge bg-danger">Absent</span>{% else %}<span class="badge bg-warning">Late</span>{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}<p class="text-muted">No attendance records.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-secondary text-white"><i class="fas fa-book"></i> Upcoming Assignments</div>
+                    <div class="card-body">
+                        {% if assignment_list %}
+                        <table class="table table-sm">
+                            <thead><tr><th>Title</th><th>Subject</th><th>Due Date</th><th>Download</th></tr></thead>
+                            <tbody>
+                                {% for a in assignment_list %}
+                                <tr>
+                                    <td>{{ a.title }}</td>
+                                    <td>{{ a.subject.name|default:"-" }}</td>
+                                    <td>{{ a.due_date|date:"d M Y" }}</td>
+                                    <td>
+                                        {% if a.file %}
+                                        <a href="{{ a.file.url }}" class="btn btn-sm btn-success" download>
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <a href="{% url 'dashboard:parent_timetable' %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-calendar-alt"></i> View All</a>
+                        {% else %}<p class="text-muted">No assignments posted yet.</p>{% endif %}
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Fee Payment Chart
+new Chart(document.getElementById('feeChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ month_labels|safe }},
+        datasets: [{
+            label: 'Amount Paid',
+            data: {{ payment_by_month|safe }},
+            backgroundColor: 'rgba(40, 167, 69, 0.6)',
+            borderColor: '#28a745',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// Attendance Doughnut Chart
+new Chart(document.getElementById('attendanceChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Present', 'Absent', 'Late'],
+        datasets: [{
+            data: [{{ present }}, {{ absent }}, {{ late }}],
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+

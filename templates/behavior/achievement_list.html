@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-trophy"></i> Achievements</h2>
+        <a href="{% url 'behavior:achievement_create' %}" class="btn btn-behac btn-sm"><i class="fas fa-plus"></i> New Achievement</a>
+    </div>
+    <div class="card">
+        <div class="card-body"><form method="get" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" name="q" class="form-control" placeholder="Search by title or student name..." value="{{ q }}">
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-behac w-100"><i class="fas fa-search"></i> Search</button>
+    </div>
+</form>
+{% if user.is_superuser or user.groups.all.0.name == "Admin" %}
+<div class="mb-3">
+    <a href="{% url "behavior:achievement_list" %}" class="btn btn-sm btn-outline-primary {% if not request.GET.all %}active{% endif %}">
+        <i class="fas fa-calendar-check"></i> Current Year
+    </a>
+    <a href="{% url "behavior:achievement_list" %}?all=1" class="btn btn-sm btn-outline-secondary {% if request.GET.all == "1" %}active{% endif %}">
+        <i class="fas fa-calendar-alt"></i> Show All Years
+    </a>
+</div>
+{% endif %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr><th>Student</th><th>Title</th><th>Date</th><th>Description</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for a in achievements %}
+                        <tr>
+                            <td>{{ a.student.full_name }}</td>
+                            <td>{{ a.title }}</td>
+                            <td>{{ a.date_awarded }}</td>
+                            <td>{{ a.description|truncatewords:10 }}</td>
+                            <td>
+                                <a href="{% url 'behavior:achievement_detail' a.pk %}" class="btn btn-sm btn-outline-info" title="View"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'behavior:achievement_update' a.pk %}" class="btn btn-sm btn-outline-success" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'behavior:achievement_delete' a.pk %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center">No achievements yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

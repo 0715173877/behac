@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-trophy"></i> Achievement Detail</h2>
+        <div>
+            <a href="{% url 'behavior:achievement_update' achievement.pk %}" class="btn btn-behac btn-sm"><i class="fas fa-edit"></i> Edit</a>
+            <a href="{% url 'behavior:achievement_delete' achievement.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+            <a href="{% url 'behavior:achievement_list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr><th>Student</th><td>{{ achievement.student.full_name }}</td></tr>
+                <tr><th>Title</th><td>{{ achievement.title }}</td></tr>
+                <tr><th>Date Awarded</th><td>{{ achievement.date_awarded }}</td></tr>
+                <tr><th>Description</th><td>{{ achievement.description }}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

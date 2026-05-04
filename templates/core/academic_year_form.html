@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-{% if object %}edit{% else %}plus-circle{% endif %}"></i> {{ title|default:"Academic Year" }}</h2>
+        <a href="{% url "core:academic_year_list" %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Year Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small">{{ form.name.errors }}</div>
+                        {% endif %}
+                        <small class="text-muted">e.g. 2025-2026</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Start Date</label>
+                        {{ form.start_date }}
+                        {% if form.start_date.errors %}
+                        <div class="text-danger small">{{ form.start_date.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">End Date</label>
+                        {{ form.end_date }}
+                        {% if form.end_date.errors %}
+                        <div class="text-danger small">{{ form.end_date.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-behac mt-3"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

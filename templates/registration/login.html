@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-success text-white text-center rounded-top-4 py-3">
+                <img src="{% static 'images/behac_logo.png' %}" alt="Behac Logo" height="50" class="mb-2">
+                <h4 class="mb-0">Behac International Academy</h4>
+                <p class="mb-0">School Management Portal</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> Your username and password didn't match. Please try again.
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Username</label>
+                        <input type="text" name="username" id="id_username" class="form-control" required autofocus>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required>
+                    </div>
+                    
+                    <input type="hidden" name="next" value="{{ next }}">
+                    
+                    <button type="submit" class="btn btn-success w-100 py-2">Login</button>
+                </form>
+                <hr class="my-3">
+                <p class="text-muted text-center small">Contact school admin if you have no account</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

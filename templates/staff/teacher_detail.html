@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-success"><i class="fas fa-chalkboard-teacher"></i> Teacher Details</h2>
+        <div>
+            <a href="{% url 'staff:teacher_update' teacher.pk %}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+            <a href="{% url 'staff:teacher_delete' teacher.pk %}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+            <a href="{% url 'staff:teacher_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Personal & Job Info -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">Personal Information</div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr><th>Full Name:</th><td>{{ teacher.user.get_full_name }}</td></tr>
+                        <tr><th>Employee ID:</th><td>{{ teacher.employee_id }}</td></tr>
+                        <tr><th>Phone:</th><td>{{ teacher.phone }}</td></tr>
+                        <tr><th>Email:</th><td>{{ teacher.user.email }}</td></tr>
+                        <tr><th>Hire Date:</th><td>{{ teacher.hire_date }}</td></tr>
+                        <tr><th>Status:</th><td>{% if teacher.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic & Salary -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-success text-white">Teaching & Salary</div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr><th>Qualification:</th><td>{{ teacher.qualification|default:"-" }}</td></tr>
+                        <tr><th>Base Salary:</th><td>${{ teacher.base_salary }}</td></tr>
+                        <tr><th>Subjects:</th><td>{% for s in teacher.subjects.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
+                        <tr><th>Classes:</th><td>{% for c in teacher.classes.all %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CV & Certificates -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">Documents</div>
+                <div class="card-body">
+                    {% if teacher.cv %}
+                        <p><a href="{{ teacher.cv.url }}" target="_blank"><i class="fas fa-file-pdf"></i> Download CV</a></p>
+                    {% else %}
+                        <p>No CV uploaded.</p>
+                    {% endif %}
+                    {% if teacher.certificates %}
+                        <p><a href="{{ teacher.certificates.url }}" target="_blank"><i class="fas fa-file-alt"></i> Download Certificates</a></p>
+                    {% else %}
+                        <p>No certificates uploaded.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">Address</div>
+                <div class="card-body">
+                    {{ teacher.address|linebreaks|default:"No address provided." }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Salary Payment History -->
+    <div class="card mb-3">
+        <div class="card-header bg-warning d-flex justify-content-between">
+            <span><i class="fas fa-money-bill-wave"></i> Salary Payment History</span>
+            <a href="{% url 'staff:add_salary_payment' teacher.id %}" class="btn btn-sm btn-success">+ Record Payment</a>
+        </div>
+        <div class="card-body">
+            {% if salary_payments %}
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>Month</th><th>Amount</th><th>Paid Date</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in salary_payments %}
+                        <tr><td>{{ p.month|date:"F Y" }}</td><td>${{ p.amount }}</td><td>{{ p.paid_date }}</td><td>{{ p.notes|default:"-" }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No salary payments recorded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

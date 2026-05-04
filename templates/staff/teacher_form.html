@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        {% if form.instance.pk %}
+                            <i class="fas fa-edit"></i> Edit Teacher
+                        {% else %}
+                            <i class="fas fa-chalkboard-teacher"></i> Add New Teacher
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- IMPORTANT: add enctype for file uploads -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <strong>Please correct the errors below.</strong>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- ========== USER ACCOUNT ========== -->
+                        <div class="section-title mb-3">
+                            <i class="fas fa-user-circle text-success"></i> User Account
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">{{ form.username.label_tag }} {{ form.username }}</div>
+                            <div class="col-md-6">{{ form.email.label_tag }} {{ form.email }}</div>
+                            <div class="col-md-6">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+                            <div class="col-md-6">{{ form.middle_name.label_tag }} {{ form.middle_name }}</div>
+                            <div class="col-md-6">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+                            
+                        </div>
+                        
+                        <!-- ========== TEACHER INFORMATION ========== -->
+                        <div class="section-title mb-3">
+                            <i class="fas fa-id-card text-success"></i> Teacher Information
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">{{ form.employee_id.label_tag }} {{ form.employee_id }}</div>
+                            <div class="col-md-6">{{ form.phone.label_tag }} {{ form.phone }}</div>
+                            <div class="col-md-12">{{ form.address.label_tag }} {{ form.address }}</div>
+                            <div class="col-md-6">{{ form.hire_date.label_tag }} {{ form.hire_date }}</div>
+                            <div class="col-md-6">{{ form.base_salary.label_tag }} {{ form.base_salary }}</div>
+                            <div class="col-md-12">{{ form.qualification.label_tag }} {{ form.qualification }}</div>
+                            <div class="col-md-6">{{ form.cv.label_tag }} {{ form.cv }}</div>
+                            <div class="col-md-6">{{ form.certificates.label_tag }} {{ form.certificates }}</div>
+                            <div class="col-md-12">{{ form.subjects.label_tag }} {{ form.subjects }}</div>
+                            <div class="col-md-12">{{ form.classes.label_tag }} {{ form.classes }}</div>
+                            <div class="col-md-12 form-check">
+                                {{ form.is_active }} <label for="{{ form.is_active.id_for_label }}" class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="{% url 'staff:teacher_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Save Teacher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-left: 6px solid #2e7d32;
+        padding-left: 12px;
+        margin-bottom: 1rem;
+    }
+    input, select, textarea {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 8px 12px;
+        width: 100%;
+    }
+    input[type="file"] {
+        padding: 6px;
+    }
+    label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        display: block;
+        color: #1e4620;
+    }
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-check input {
+        width: auto;
+    }
+    .help-text, .text-muted {
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}

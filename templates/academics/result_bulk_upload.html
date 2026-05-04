@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-upload"></i> Bulk Upload Results</h2>
+        <a href="{% url 'academics:result_list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back to Results</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                Upload an Excel file (.xlsx) with the following columns: 
+                <strong>registration_number, full_name, subject_code, exam_name, marks_obtained, teacher_comment</strong>.<br>
+                <strong>Tip:</strong> You can use either <code>registration_number</code> or <code>full_name</code> to identify students.
+                The downloaded template includes both columns pre-filled for you.
+            </div>
+
+            <!-- Template Download with Pre-fill Options -->
+            <div class="card bg-light mb-4">
+                <div class="card-header bg-behac text-white">
+                    <i class="fas fa-download"></i> Step 1: Download Template (pre-filled with students)
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'academics:result_download_template' %}" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>Class</strong></label>
+                            <select name="class" class="form-select" required>
+                                <option value="">-- Select Class --</option>
+                                {% for cl in classlevels %}
+                                <option value="{{ cl.id }}">{{ cl.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>Subject</strong></label>
+                            <select name="subject" class="form-select" required>
+                                <option value="">-- Select Subject --</option>
+                                {% for subj in subjects %}
+                                <option value="{{ subj.code }}">{{ subj.name }} ({{ subj.code }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label"><strong>Exam</strong></label>
+                            <input type="text" name="exam" class="form-control" value="Mid Term 2025" placeholder="Exam name">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-behac w-100">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </form>
+                    <small class="text-muted mt-2 d-block">
+                        <i class="fas fa-info-circle"></i> 
+                        Select class and subject to get a template pre-filled with student names and registration numbers.
+                        Just fill in the <strong>marks_obtained</strong> and <strong>teacher_comment</strong> columns.
+                    </small>
+                </div>
+            </div>
+
+            {% if request.session.result_bulk_errors %}
+            <div class="alert alert-warning">
+                <h5><i class="fas fa-exclamation-triangle"></i> Import Errors</h5>
+                <ul>
+                {% for row, error in request.session.result_bulk_errors %}
+                    <li>Row {{ row }}: {{ error }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Upload Form -->
+            <div class="card bg-light">
+                <div class="card-header bg-success text-white">
+                    <i class="fas fa-upload"></i> Step 2: Upload Completed Excel File
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Excel File (.xlsx)</strong></label>
+                            <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+                        </div>
+                        <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Upload & Import</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

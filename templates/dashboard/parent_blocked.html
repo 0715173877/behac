@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white text-center py-3">
+                    <h4 class="mb-0"><i class="fas fa-lock"></i> Access Restricted</h4>
+                </div>
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-exclamation-triangle text-danger fa-4x mb-3"></i>
+                    <h5 class="text-danger">Outstanding Balance Detected</h5>
+                    
+                    {% if students|length > 1 and has_outstanding %}
+                    <p class="mt-3">The following student(s) have outstanding balances:</p>
+                    <div class="list-group text-start mb-3">
+                        {% for item in blocked_students %}
+                        <div class="list-group-item list-group-item-danger d-flex justify-content-between">
+                            <strong>{{ item.student.full_name }}</strong>
+                            <span class="badge bg-danger">Balance: {{ item.balance|floatformat:0 }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% elif student_blocked %}
+                    <p class="mt-3">
+                        <strong>{{ student.full_name }}</strong> has an outstanding balance of 
+                        <span class="text-danger fw-bold">{{ balance|floatformat:0 }}</span>.
+                    </p>
+                    {% endif %}
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i> 
+                        Please clear the outstanding balance to view:
+                        <ul class="text-start mt-2 mb-0">
+                            <li>Exam Results & Progress Reports</li>
+                            <li>Assignment Downloads</li>
+                            <li>Class Timetable</li>
+                            <li>Behavior & Achievement Records</li>
+                            <li>Attendance Records</li>
+                            <li>Payment History</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6><i class="fas fa-money-bill-wave text-success"></i> How to Pay</h6>
+                        <p class="text-muted">Please visit the school finance office or contact the accountant to make payment.</p>
+                        <table class="table table-sm table-bordered text-start">
+                            <tr><td>Expected Fee</td><td><strong>{{ expected|floatformat:0 }}</strong></td></tr>
+                            <tr><td>Total Paid</td><td>{{ paid|floatformat:0 }}</td></tr>
+                            <tr class="table-danger"><td><strong>Outstanding Balance</strong></td><td><strong>{{ balance|floatformat:0 }}</strong></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

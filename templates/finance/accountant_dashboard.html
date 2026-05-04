@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-chart-pie"></i> Financial Overview</h2>
+        <div>
+            <a href="{% url 'finance:payment_list' %}" class="btn btn-behac btn-sm"><i class="fas fa-list"></i> All Payments</a>
+            <a href="{% url 'finance:select_student' %}" class="btn btn-behac btn-sm"><i class="fas fa-plus"></i> New Payment</a>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="row g-2 mb-3">
+        <div class="col-md-3">
+            <div class="card bg-success text-white text-center py-3">
+                <small>Total Income</small>
+                <h3 class="mb-0">TZS {{ total_income|floatformat:2|intcomma }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white text-center py-3">
+                <small>This Month</small>
+                <h3 class="mb-0">TZS {{ month_income|floatformat:2|intcomma }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark text-center py-3">
+                <small>Today</small>
+                <h3 class="mb-0">TZS {{ today_income|floatformat:2|intcomma }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white text-center py-3">
+                <small>Outstanding Students</small>
+                <h3 class="mb-0">{{ outstanding_count }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Income by Category -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white"><i class="fas fa-tags"></i> Income by Category</div>
+                <div class="card-body">
+                    {% if income_by_category %}
+                    <table class="table table-sm table-striped">
+                        <thead><tr><th>Category</th><th>Amount</th><th>%</th></tr></thead>
+                        <tbody>
+                            {% for cat in income_by_category %}
+                            <tr>
+                                <td>{{ cat.fee_category__name }}</td>
+                                <td><strong>{{ cat.total|floatformat:0 }}</strong></td>
+                                <td>{{ cat.total|floatformat:0|divisibleby:total_income|floatformat:1 }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <strong>Total: TZS {{ total_income|floatformat:2|intcomma }}</strong>
+                    {% else %}<p class="text-muted">No payments recorded.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Income Trend -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white"><i class="fas fa-chart-line"></i> Monthly Income (Last 6 Months)</div>
+                <div class="card-body">
+                    {% if monthly_income %}
+                    <table class="table table-sm table-striped">
+                        <thead><tr><th>Month</th><th>Amount</th></tr></thead>
+                        <tbody>
+                            {% for month, amount in monthly_income %}
+                            <tr>
+                                <td>{{ month }}</td>
+                                <td><strong>{{ amount|floatformat:0 }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}<p class="text-muted">No data for last 6 months.</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outstanding Students -->
+    <div class="card mb-3">
+        <div class="card-header bg-danger text-white d-flex justify-content-between">
+            <span><i class="fas fa-exclamation-triangle"></i> Students with Outstanding Balances</span>
+            <span class="badge bg-light text-dark">{{ outstanding_count }} student(s)</span>
+        </div>
+        <div class="card-body">
+            {% if outstanding_students %}
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover">
+                    <thead><tr><th>#</th><th>Student</th><th>Class</th><th>Expected Fee</th><th>Paid</th><th>Balance</th></tr></thead>
+                    <tbody>
+                        {% for item in outstanding_students %}
+                        <tr class="{% if item.balance > 0 %}table-danger{% endif %}">
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'students:detail' item.student.pk %}">{{ item.student.full_name }}</a></td>
+                            <td>{{ item.class_name }}</td>
+                            <td>TZS {{ item.expected|floatformat:2|intcomma }}</td>
+                            <td>{{ item.paid|floatformat:0 }}</td>
+                            <td><strong class="text-danger">TZS {{ item.balance|floatformat:2|intcomma }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted">All students have cleared their balances! <i class="fas fa-check-circle text-success"></i></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="card mb-3">
+        <div class="card-header bg-info text-white"><i class="fas fa-clock"></i> Recent Payments</div>
+        <div class="card-body">
+            {% if recent_payments %}
+            <table class="table table-sm">
+                <thead><tr><th>Date</th><th>Student</th><th>Category</th><th>Amount</th><th>Receipt</th></tr></thead>
+                <tbody>
+                    {% for p in recent_payments %}
+                    <tr>
+                        <td>{{ p.payment_date|date:"d/m/Y" }}</td>
+                        <td>{{ p.student.full_name }}</td>
+                        <td>{{ p.fee_category.name }}</td>
+                        <td><strong>TZS {{ p.amount_paid|floatformat:2|intcomma }}</strong></td>
+                        <td><code>{{ p.receipt_number }}</code></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-muted">No recent payments.</p>{% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

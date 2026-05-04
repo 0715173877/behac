@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-calendar-alt"></i> Timetables</h2>
+        <div>
+            <a href="{% url "academics:timetable_create" %}" class="btn btn-behac btn-sm"><i class="fas fa-plus"></i> Add Entry</a>
+        </div>
+    </div>
+    
+    <!-- Today's Alert -->
+    {% if user.is_authenticated %}
+    <div class="alert alert-info d-flex align-items-center py-2">
+        <i class="fas fa-calendar-day me-2 fa-lg"></i>
+        <div>
+            <strong>Today</strong> is <span class="badge bg-primary">{% now "l" %}</span> 
+            {% now "F j, Y" %}
+            {% if current_year %}<span class="ms-2 text-muted">| {{ current_year.name }}</span>{% endif %}
+        </div>
+    </div>
+    
+    <!-- My Teaching Schedule Today (for teachers) -->
+    {% if hasattr_user_teacher %}
+    <div class="card border-info mb-3">
+        <div class="card-header bg-info text-white py-2">
+            <i class="fas fa-chalkboard-teacher"></i> My Classes Today ({% now "l" %})
+        </div>
+        <div class="card-body py-2">
+            <div class="row g-1">
+                {% for t in timetables %}
+                {% if t.day_of_week == today_weekday %}
+                <div class="col-md-3 mb-1">
+                    <div class="border rounded p-2 bg-light">
+                        <small class="text-muted">Period {{ t.period }}</small>
+                        <div><strong>{{ t.subject.name }}</strong></div>
+                        <small>{{ t.class_level.name }}</small>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% with todays=timetables %}
+                {% if todays %}
+                {% else %}
+                <div class="col-12 text-muted"><i class="fas fa-check"></i> No classes scheduled for today.</div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    
+    <!-- Year Switcher -->
+    {% if user.is_superuser or user.groups.all.0.name == "Admin" %}
+    <div class="mb-3">
+        <a href="{% url "academics:timetable_list" %}" class="btn btn-sm btn-outline-primary {% if not request.GET.all %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i> Current Year
+        </a>
+        <a href="{% url "academics:timetable_list" %}?all=1" class="btn btn-sm btn-outline-secondary {% if request.GET.all == "1" %}active{% endif %}">
+            <i class="fas fa-calendar-alt"></i> Show All Years
+        </a>
+    </div>
+    {% endif %}
+    
+    {% if timetables %}
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-success">
+                        <tr>
+                            <th>#</th>
+                            <th>Class</th>
+                            <th>Day</th>
+                            <th>Period</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Year</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in timetables %}
+                        <tr class="{% if t.day_of_week == today_weekday %}table-warning fw-bold{% endif %}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ t.class_level.name }}</td>
+                            <td>
+                                {% if t.day_of_week == today_weekday %}
+                                <span class="badge bg-warning text-dark"><i class="fas fa-sun"></i> {{ t.get_day_of_week_display }}</span>
+                                {% else %}
+                                {{ t.get_day_of_week_display }}
+                                {% endif %}
+                            </td>
+                            <td>{{ t.period }}</td>
+                            <td>{{ t.subject.name }}</td>
+                            <td>{{ t.teacher.full_name }}</td>
+                            <td>{{ t.academic_year.name }}</td>
+                            <td>
+                                <a href="{% url "academics:timetable_update" t.pk %}" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+                                <a href="{% url "academics:timetable_delete" t.pk %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}<tr><td colspan="8" class="text-center text-muted">No timetable entries found.</td></tr>{% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-muted">No timetable entries yet. <a href="{% url "academics:timetable_create" %}">Add one</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

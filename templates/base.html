@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Behac International Academy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --behac-dark: #1B5E20;
+            --behac-light: #4CAF50;
+            --behac-bg: #E8F5E9;
+            --sidebar-width: 250px;
+        }
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        /* Top navbar */
+        .topbar {
+            background: linear-gradient(135deg, var(--behac-dark), var(--behac-light));
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+        }
+        .topbar-brand {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .topbar-brand img {
+            height: 35px;
+        }
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding-top: 10px;
+            overflow-y: auto;
+            z-index: 1020;
+            transition: transform 0.3s ease;
+        }
+        .sidebar .nav-section {
+            padding: 8px 15px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #999;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        .sidebar .nav-item {
+            padding: 0;
+        }
+        .sidebar .nav-link {
+            padding: 10px 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: var(--behac-bg);
+            border-left-color: var(--behac-light);
+            color: var(--behac-dark);
+        }
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            color: var(--behac-light);
+        }
+        .sidebar .nav-link.active {
+            background-color: var(--behac-bg);
+            border-left-color: var(--behac-dark);
+            font-weight: 600;
+        }
+        .sidebar .user-info {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+        }
+        .sidebar .user-info .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .sidebar .user-info .role {
+            font-size: 0.8rem;
+            color: #777;
+        }
+        /* Main content */
+        .main-content {
+            margin-top: 60px;
+            margin-left: var(--sidebar-width);
+            padding: 20px 30px;
+            min-height: calc(100vh - 60px);
+        }
+        /* Footer */
+        .main-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        /* Responsive sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+        }
+        /* Cards */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: none;
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .stats-card {
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+        }
+        .stats-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .stats-card .label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        .bg-behac-dark { background-color: var(--behac-dark); }
+        .bg-behac-light { background-color: var(--behac-light); }
+        .btn-behac {
+            background-color: var(--behac-dark);
+            border-color: var(--behac-dark);
+            color: white;
+        }
+        .btn-behac:hover {
+            background-color: #0D3B0F;
+            color: white;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .page-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--behac-dark);
+        }
+        table.table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        table.table thead th {
+            background-color: var(--behac-bg);
+            color: var(--behac-dark);
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        footer {
+            display: none;
+        }
+    </style>
+{% block extra_head %}{% endblock %}
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <!-- Top Bar -->
+    <nav class="topbar">
+        <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="topbar-brand" href="{% url 'dashboard:home' %}">
+            <img src="/static/images/behac_logo.png" alt="Logo"> Behac International Academy
+        </a>
+        {% if current_year %}
+        <span class="badge bg-light text-dark ms-2 p-2 border" style="font-size: 0.75rem;">
+            <i class="fas fa-calendar-alt text-success"></i> {{ current_year.name }}
+        </span>
+        {% endif %}
+        <div class="ms-auto">
+            {% if user.is_authenticated %}
+                <span class="me-2 d-none d-sm-inline"><i class="fas fa-user-circle"></i> {{ user.get_full_name|default:user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="user-info">
+            <div class="name">{{ user.get_full_name|default:user.username }}</div>
+            <div class="role">
+                {% if user.is_superuser %}Owner
+                {% elif user.groups.all %}{{ user.groups.first.name }}
+                {% else %}Staff{% endif %}
+            </div>
+
+        </div>
+
+        {% if user.is_authenticated %}
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'dashboard:home' %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+
+            {% with user_groups=user.groups.all %}
+            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Teacher' in user_groups|join:', ' %}
+            <li class="nav-section">Academics</li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/result/' in request.path %}active{% endif %}" href="{% url 'academics:result_list' %}"><i class="fas fa-chart-line"></i> Results</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/attendance/' in request.path %}active{% endif %}" href="{% url 'academics:attendance_list' %}"><i class="fas fa-calendar-check"></i> Attendance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/assignment/' in request.path %}active{% endif %}" href="{% url 'academics:assignment_list' %}"><i class="fas fa-tasks"></i> Assignments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/exam/' in request.path %}active{% endif %}" href="{% url 'academics:exam_list' %}"><i class="fas fa-pencil-alt"></i> Exams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/timetable/' in request.path %}active{% endif %}" href="{% url 'academics:timetable_list' %}"><i class="fas fa-calendar-alt"></i> Timetable</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/subject/' in request.path %}active{% endif %}" href="{% url 'academics:subject_list' %}"><i class="fas fa-book"></i> Subjects</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/academics/classlevel/' in request.path %}active{% endif %}" href="{% url 'academics:classlevel_list' %}"><i class="fas fa-school"></i> Classes</a>
+            </li>
+            {% endif %}
+
+            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Accountant' in user_groups|join:', ' %}
+            <li class="nav-section">Finance</li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/payment/' in request.path %}active{% endif %}" href="{% url 'finance:payment_list' %}"><i class="fas fa-money-bill-wave"></i> Payments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/accountant/' in request.path %}active{% endif %}" href="{% url 'finance:accountant_dashboard' %}"><i class="fas fa-chart-pie"></i> Finance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/payment_report/' in request.path %}active{% endif %}" href="{% url 'finance:payment_report' %}"><i class="fas fa-file-invoice"></i> Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/outstanding/' in request.path %}active{% endif %}" href="{% url 'finance:outstanding_report' %}"><i class="fas fa-exclamation-triangle"></i> Outstanding</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/category/' in request.path %}active{% endif %}" href="{% url 'finance:category_list' %}"><i class="fas fa-tags"></i> Fee Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/finance/feestructure/' in request.path %}active{% endif %}" href="{% url 'finance:feestructure_list' %}"><i class="fas fa-dollar-sign"></i> Fee Structures</a>
+            </li>
+            {% endif %}
+
+            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' %}
+            <li class="nav-section">Administration</li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/core/academic-years/' in request.path %}active{% endif %}" href="{% url 'core:academic_year_list' %}"><i class="fas fa-calendar-alt"></i> Academic Years</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/core/terms/' in request.path %}active{% endif %}" href="{% url "core:term_list" %}"><i class="fas fa-calendar-week"></i> Terms</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/teachers/' in request.path and not '/students/' in request.path and not '/teachers/users/' in request.path %}active{% endif %}" href="{% url 'staff:teacher_list' %}"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/teachers/users/' in request.path %}active{% endif %}" href="{% url 'staff:user_list' %}"><i class="fas fa-users-cog"></i> Users</a>
+            </li>
+            {% if 'Owner' not in user_groups|join:', ' or user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link {% if '/admin/' in request.path %}active{% endif %}" href="/admin/"><i class="fas fa-cog"></i> Admin Panel</a>
+            </li>
+            {% endif %}
+            {% endif %}
+
+            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Teacher' in user_groups|join:', ' %}
+            <li class="nav-section">Records</li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/students/' in request.path %}active{% endif %}" href="{% url 'students:list' %}"><i class="fas fa-users"></i> Students</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/behavior/records/' in request.path or '/behavior/record/' in request.path %}active{% endif %}" href="{% url 'behavior:behavior_list' %}"><i class="fas fa-exclamation-triangle"></i> Behavior</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/behavior/achievement/' in request.path %}active{% endif %}" href="{% url 'behavior:achievement_list' %}"><i class="fas fa-trophy"></i> Achievements</a>
+            </li>
+            {% endif %}
+
+            {% if 'Parent' in user_groups|join:', ' %}
+            <li class="nav-section">My Child</li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/' == request.path %}active{% endif %}" href="{% url 'dashboard:parent' %}"><i class="fas fa-tachometer-alt"></i> Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/progress/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_progress' %}"><i class="fas fa-chart-line"></i> Full Progress</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/payments/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_payments' %}"><i class="fas fa-money-bill-wave"></i> Payments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/behavior/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_behavior' %}"><i class="fas fa-exclamation-triangle"></i> Behavior</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/attendance/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_attendance' %}"><i class="fas fa-calendar-check"></i> Attendance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/timetable/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_timetable' %}"><i class="fas fa-calendar-alt"></i> Timetable</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/parent/achievements/' in request.path %}active{% endif %}" href="{% url 'dashboard:parent_achievements' %}"><i class="fas fa-trophy"></i> Achievements</a>
+            </li>
+            {% endif %}
+            {% endwith %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="main-content"{% if not user.is_authenticated %} style="margin-left: 0 !important;"{% endif %}>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+        
+        <div class="main-footer">
+            &copy; {% now "Y" %} Behac International Academy – For Smart People. All rights reserved.
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+    <script>
+        // Auto-close sidebar on small screens when clicking outside
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.sidebar-toggle');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('show') && 
+                !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

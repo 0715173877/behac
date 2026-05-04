@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4><i class="fas fa-upload"></i> Bulk Student Import (Excel)</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <strong>Template Required</strong><br>
+                Download the <a href="{% url 'students:download_template' %}" class="alert-link">Excel template</a> and fill in student data.<br>
+                Supported columns: first_name, last_name, date_of_birth, gender, birth_cert_number, current_class,
+                parent_name, parent_mobile, parent_username, parent_email, region, district, 
+                relationship1_name, other_relative1_name, other_relative1_mobile, other_relative1_occupation,
+                (optional second relative with suffix 2).
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Upload & Import</button>
+                <a href="{% url 'students:list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

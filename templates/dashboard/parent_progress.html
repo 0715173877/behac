@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_head %}<style>@media print{.sidebar,.navbar,.main-footer,.no-print{display:none!important}.main-content{margin-left:0!important}}</style>{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <h2><i class="fas fa-chart-line"></i> Full Academic Progress</h2>
+        <button class="btn btn-sm btn-light no-print" onclick="window.print()"><i class="fas fa-download"></i> PDF</button>
+    </div>
+    {% with students=students student=student %}
+    {% include 'dashboard/_child_selector.html' %}
+    {% endwith %}
+    <div class="card mb-3">
+        <div class="card-header bg-dark text-white"><i class="fas fa-chart-line"></i> Results by Academic Year</div>
+        <div class="card-body">
+            {% if progress_current %}
+            <div class="accordion" id="progressAcc">
+                {% for yr_name, terms in progress_current.items %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header"><button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#pyr{{ forloop.counter }}"><i class="fas fa-calendar-alt me-2"></i> {{ yr_name }}</button></h2>
+                    <div id="pyr{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"><div class="accordion-body p-2">
+                        {% for term_name, term_results in terms.items %}
+                        <h6 class="border-bottom pb-1 mt-2"><i class="fas fa-calendar-week text-info"></i> {{ term_name }} <span class="badge bg-secondary">{{ term_results|length }} exams</span></h6>
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light"><tr><th>Exam</th><th>Subject</th><th>Marks</th><th>Max</th><th>Grade</th><th>Comment</th></tr></thead>
+                            <tbody>{% for r in term_results %}<tr><td>{{ r.exam.name }}</td><td>{{ r.subject.name }}</td><td><strong>{{ r.marks_obtained }}</strong></td><td>{{ r.exam.max_marks }}</td><td><span class="badge bg-{% if r.grade == 'A' %}success{% elif r.grade == 'B' %}primary{% elif r.grade == 'C' %}warning{% elif r.grade == 'D' %}info{% else %}danger{% endif %}">{{ r.grade }}</span></td><td><small>{{ r.teacher_comment|default:"-" }}</small></td></tr>{% endfor %}</tbody>
+                        </table>
+                        {% endfor %}
+                    </div></div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}<p class="text-muted">No exam results available yet.</p>{% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

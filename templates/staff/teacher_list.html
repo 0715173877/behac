@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-success"><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
+    <a href="{% url 'staff:teacher_create' %}" class="btn btn-success"><i class="fas fa-plus"></i> Add Teacher</a>
+</div>
+<div class="card shadow">
+    <div class="card-body"><form method="get" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input type="text" name="q" class="form-control" placeholder="Search by name, employee ID or email..." value="{{ q }}">
+    </div>
+    <div class="col-md-4">
+        <select name="class" class="form-select">
+            <option value="">All Classes</option>
+            {% for c in classlevels %}
+            <option value="{{ c.id }}" {% if selected_class|add:'0' == c.id|add:'0' %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-behac w-100"><i class="fas fa-search"></i> Search</button>
+    </div>
+</form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Employee ID</th>
+                    <th>Phone</th>
+                    <th>Classes</th>
+                    <th>Subjects</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in teachers %}
+                <tr>
+                    <td>
+                        <a href="{% url 'staff:teacher_detail' t.pk %}" class="text-decoration-none">
+                            {{ t.user.first_name }} {{ t.middle_name|default:"" }} {{ t.user.last_name }}
+                        </a>
+                    </td>
+                    <td>{{ t.employee_id }}</td>
+                    <td>{{ t.phone }}</td>
+                    <td>{% for cls in t.classes.all %}{{ cls.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                    <td>{% for sub in t.subjects.all %}{{ sub.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                    <td>{% if t.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+                    <td>
+                        <a href="{% url 'staff:teacher_detail' t.pk %}" class="btn btn-sm btn-info" title="View">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{% url 'staff:teacher_update' t.pk %}" class="btn btn-sm btn-warning" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'staff:teacher_delete' t.pk %}" class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7">No teachers found. Add one!</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

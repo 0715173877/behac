@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Delete Teacher</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Are you sure you want to delete:</p>
+                    <h5 class="text-danger">{{ object.full_name }}</h5>
+                    <p>Employee ID: {{ object.employee_id }}</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="{% url 'staff:teacher_detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

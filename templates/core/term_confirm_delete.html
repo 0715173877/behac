@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-trash"></i> Delete Term</h2>
+        <a href="{% url "core:term_list" %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <p>Are you sure you want to delete term <strong>{{ object.name }}</strong>?</p>
+            <p class="text-muted">Academic Year: {{ object.academic_year.name }}</p>
+            <p class="text-muted">{{ object.start_date|date:"M d, Y" }} - {{ object.end_date|date:"M d, Y" }}</p>
+            {% if object.exam_set.exists %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i> This term has {{ object.exam_set.count }} exam(s) linked.
+                Deleting this term will also delete those exams and their results.
+            </div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url "core:term_list" %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

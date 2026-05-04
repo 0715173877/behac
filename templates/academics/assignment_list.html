@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success"><i class="fas fa-tasks"></i> Assignments</h2>
+        <a href="{% url 'academics:assignment_create' %}" class="btn btn-success">+ New Assignment</a>
+    </div>
+    
+    {% if user.is_superuser or user.groups.all.0.name == "Admin" %}
+    <div class="mb-3">
+        <a href="{% url 'academics:assignment_list' %}" class="btn btn-sm btn-outline-primary {% if not request.GET.all %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i> Current Year
+        </a>
+        <a href="{% url 'academics:assignment_list' %}?all=1" class="btn btn-sm btn-outline-secondary {% if request.GET.all == '1' %}active{% endif %}">
+            <i class="fas fa-calendar-alt"></i> Show All Years
+        </a>
+    </div>
+    {% endif %}
+    
+    {% if assignments %}
+        <div class="row">
+            {% for assignment in assignments %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        {{ assignment.title }}
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Subject:</strong> {{ assignment.subject.name }}</p>
+                        <p><strong>Class:</strong> {{ assignment.class_level.name }}</p>
+                        <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+                        <p><strong>Description:</strong> {{ assignment.description|truncatewords:20 }}</p>
+                        {% if assignment.file %}
+                            <a href="{{ assignment.file.url }}" class="btn btn-sm btn-info">Download File</a>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="{% url 'academics:assignment_update' assignment.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'academics:assignment_delete' assignment.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No assignments created yet. Click "New Assignment" to add one.</div>
+    {% endif %}
+</div>
+{% endblock %}

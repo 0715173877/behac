@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4><i class="fas fa-upload"></i> Bulk Payment Import (Excel)</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <strong>Template Required</strong><br>
+                <a href="{% url 'finance:download_payment_template' %}" class="alert-link">
+                    <i class="fas fa-download"></i> Download Excel Template
+                </a><br>
+                Columns: birth_cert_number, fee_category, amount, payment_date (YYYY-MM-DD), installment_month (optional), notes (optional)
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Upload & Import</button>
+                <a href="{% url 'finance:payment_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+
+            {% if request.session.payment_bulk_errors %}
+                <div class="alert alert-danger mt-3">
+                    <strong>Errors encountered:</strong>
+                    <pre>{{ request.session.payment_bulk_errors|pprint }}</pre>
+
+                    <ul>
+                        {% for row, msg in request.session.payment_bulk_errors %}
+                            <li>Row {{ row }}: {{ msg }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

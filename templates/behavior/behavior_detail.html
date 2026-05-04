@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-clipboard-list"></i> Behavior Record Detail</h2>
+        <div>
+            <a href="{% url 'behavior:behavior_update' record.pk %}" class="btn btn-behac btn-sm"><i class="fas fa-edit"></i> Edit</a>
+            <a href="{% url 'behavior:behavior_delete' record.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>
+            <a href="{% url 'behavior:behavior_list' %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr><th>Student</th><td>{{ record.student.full_name }}</td></tr>
+                <tr><th>Type</th><td>{% if record.behavior_type == 'POS' %}<span class="badge bg-success">Positive</span>{% else %}<span class="badge bg-danger">Negative</span>{% endif %}</td></tr>
+                <tr><th>Description</th><td>{{ record.description }}</td></tr>
+                <tr><th>Action Taken</th><td>{{ record.action_taken|default:'None' }}</td></tr>
+                <tr><th>Date</th><td>{{ record.date }}</td></tr>
+                <tr><th>Resolved</th><td>{% if record.resolved %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-warning">No</span>{% endif %}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

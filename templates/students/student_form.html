@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white rounded-top-4 py-3">
+            <h3 class="mb-0">
+                {% if form.instance.pk %}
+                    <i class="fas fa-user-edit"></i> Edit Student
+                {% else %}
+                    <i class="fas fa-user-graduate"></i> Register New Student
+                {% endif %}
+            </h3>
+            <small class="text-white-50">Fill in all required fields (*)</small>
+        </div>
+        <div class="card-body p-4">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong><i class="fas fa-exclamation-circle"></i> Please correct the errors below:</strong>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li><strong>{{ field }}</strong>: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                {% if relatives.errors %}
+                <div class="alert alert-warning">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Relative forms have errors</strong>
+                </div>
+                {% endif %}
+
+                <!-- ========== SECTION 1: PERSONAL DETAILS ========== -->
+                <div class="section-title mb-3">
+                    <i class="fas fa-id-card text-success"></i> Personal Information
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+                    <div class="col-md-4">{{ form.middle_name.label_tag }} {{ form.middle_name }}</div>
+                    <div class="col-md-4">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+                    <div class="col-md-4">{{ form.gender.label_tag }} {{ form.gender }}</div>
+                    <div class="col-md-3">{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</div>
+                    <div class="col-md-3">{{ form.religion.label_tag }} {{ form.religion }}</div>
+                    <div class="col-md-3">{{ form.nida.label_tag }} {{ form.nida }}</div>
+                    <div class="col-md-3">{{ form.birth_cert_number.label_tag }} {{ form.birth_cert_number }}</div>
+                </div>
+
+                <!-- ========== SECTION 2: CLASS & LOCATION ========== -->
+                <div class="section-title mt-4 mb-3">
+                    <i class="fas fa-school text-success"></i> Class & Location
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">{{ form.current_class.label_tag }} {{ form.current_class }}</div>
+                    <div class="col-md-4">{{ form.region.label_tag }} {{ form.region }}</div>
+                    <div class="col-md-4">{{ form.district.label_tag }} {{ form.district }}</div>
+                    <div class="col-md-6">{{ form.street.label_tag }} {{ form.street }}</div>
+                    <div class="col-md-6">{{ form.mobile.label_tag }} {{ form.mobile }}</div>
+                </div>
+
+                <!-- ========== SECTION 3: PRIMARY PARENT/GUARDIAN ========== -->
+                <div class="section-title mt-4 mb-3">
+                    <i class="fas fa-user-friends text-success"></i> Primary Parent/Guardian
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">{{ form.parent_name.label_tag }} {{ form.parent_name }}</div>
+                    <div class="col-md-4">{{ form.parent_mobile.label_tag }} {{ form.parent_mobile }}</div>
+                    <div class="col-md-4">{{ form.parent_occupation.label_tag }} {{ form.parent_occupation }}</div>
+                    <div class="col-md-4">{{ form.parent_nida.label_tag }} {{ form.parent_nida }}</div>
+                </div>
+
+                <!-- ========== SECTION 4: PARENT LOGIN ACCOUNT ========== -->
+                <!-- Parent Login Account -->
+                <div class="section-title mt-4 mb-3">
+                    <i class="fas fa-laptop text-success"></i> Parent Login Account
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">{{ form.parent_username.label_tag }} {{ form.parent_username }}</div>
+                    <div class="col-md-6">{{ form.parent_email.label_tag }} {{ form.parent_email }}</div>
+                </div>
+
+                <!-- ========== SECTION 4: OTHER RELATIVES (max 2) ========== -->
+                 
+                <div class="section-title mt-4 mb-3">
+                    <i class="fas fa-address-book text-success"></i> Other Relatives (optional, max 2)
+                </div>
+                {{ relatives.management_form }}
+                <div id="relatives-formset">
+                    {% for formset_form in relatives %}
+                        <div class="card bg-light mb-3 relative-form">
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-md-3">{{ formset_form.name.label_tag }} {{ formset_form.name }}</div>
+                                    <div class="col-md-3">{{ formset_form.mobile.label_tag }} {{ formset_form.mobile }}</div>
+                                    <div class="col-md-3">{{ formset_form.relationship.label_tag }} {{ formset_form.relationship }}</div>
+                                    <div class="col-md-3">{{ formset_form.occupation.label_tag }} {{ formset_form.occupation }}</div>
+                                </div>
+                                {% if formset_form.instance.pk %}
+                                    <div class="mt-2 form-check">
+                                        {{ formset_form.DELETE }} Delete this relative
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- ========== BUTTONS ========== -->
+                <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                    <a href="{% url 'students:list' %}" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-success px-5">
+                        <i class="fas fa-save"></i> Save Student
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-left: 6px solid #2e7d32;
+        padding-left: 12px;
+        margin-bottom: 1rem;
+    }
+    input, select, textarea {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 8px 12px;
+        width: 100%;
+    }
+    label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        display: block;
+        color: #1e4620;
+    }
+    .relative-form .card-body {
+        padding: 1rem;
+    }
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
+{% endblock %}

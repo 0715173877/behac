@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Attendance Records</h2>
+        <a href="{% url 'academics:attendance_create' %}" class="btn btn-success">Mark Attendance</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+        {% if user.is_superuser or user.groups.all.0.name == "Admin" %}
+        <div class="mb-3">
+            <a href="{% url "academics:attendance_list" %}" class="btn btn-sm btn-outline-primary {% if not request.GET.all %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i> Current Year
+            </a>
+            <a href="{% url "academics:attendance_list" %}?all=1" class="btn btn-sm btn-outline-secondary {% if request.GET.all == "1" %}active{% endif %}">
+                <i class="fas fa-calendar-alt"></i> Show All Years
+            </a>
+        </div>
+        {% endif %}
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-5">
+            <input type="text" name="q" class="form-control" placeholder="Search student name..." value="{{ q }}">
+        </div>
+        <div class="col-md-4">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="P" {% if selected_status == 'P' %}selected{% endif %}>Present</option>
+                <option value="A" {% if selected_status == 'A' %}selected{% endif %}>Absent</option>
+                <option value="L" {% if selected_status == 'L' %}selected{% endif %}>Late</option>
+                <option value="E" {% if selected_status == 'E' %}selected{% endif %}>Excused</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-behac w-100"><i class="fas fa-search"></i> Filter</button>
+        </div>
+    </form>
+            <table class="table table-striped">
+                <thead class="table-success">
+                    <tr><th>Student</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for a in attendances %}
+                    <tr>
+                        <td>{{ a.student.full_name }}</td>
+                        <td>{{ a.date }}</td>
+                        <td>{{ a.get_status_display }}</td>
+                        <td><a href="{% url 'academics:attendance_update' a.pk %}" class="btn btn-sm btn-warning">Edit</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">No attendance records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

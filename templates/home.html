@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-gradient text-white text-center py-5" style="background: linear-gradient(135deg, #1B5E20, #4CAF50);">
+    <div class="container">
+        <img src="{% static 'images/behac_logo.png' %}" alt="Behac Logo" height="80" class="mb-3">
+        <h1 class="display-4 fw-bold">Behac International Academy</h1>
+        <p class="lead">“For Smart People” – Integrated School Management System</p>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}" class="btn btn-light btn-lg mt-3">Login to Portal</a>
+        {% else %}
+        <a href="{% url 'dashboard:redirect' %}" class="btn btn-light btn-lg mt-3">Go to Dashboard</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Role Features Section -->
+<div class="container my-5">
+    <h2 class="text-center text-success mb-5">Role‑Specific Portals</h2>
+    <div class="row g-4">
+        <!-- Parent -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-child fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Parent</h5>
+                    <p class="card-text">View child's results, attendance, fee history, behavior records, download report cards.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Teacher -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-chalkboard-teacher fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Teacher</h5>
+                    <p class="card-text">Enter exam results, record behavior, mark attendance, manage assignments.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Accountant -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-calculator fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Accountant</h5>
+                    <p class="card-text">Manage fee categories, record payments, generate receipts, view financial reports.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Admin -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-shield fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Admin</h5>
+                    <p class="card-text">Full system control, user management, class & subject configuration, academic years.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Academic (Coordinator) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-graduation-cap fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Academic</h5>
+                    <p class="card-text">Oversee examinations, curriculum, term schedules, and overall academic progress.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Owner -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="fas fa-crown fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Owner</h5>
+                    <p class="card-text">High‑level analytics, school performance, strategic decisions, full financial oversight.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats / Counter Section (Optional) -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h2 class="text-success">9</h2>
+                <p>Classes (3 Pre + 6 Primary)</p>
+            </div>
+            <div class="col-md-3">
+                <h2 class="text-success">100%</h2>
+                <p>Digital Reporting</p>
+            </div>
+            <div class="col-md-3">
+                <h2 class="text-success">24/7</h2>
+                <p>Parent Access</p>
+            </div>
+            <div class="col-md-3">
+                <h2 class="text-success">Secure</h2>
+                <p>Role‑Based Data</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer extra (already in base) -->
+{% endblock %}

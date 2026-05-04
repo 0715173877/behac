@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-clipboard-list"></i> Behavior Records</h2>
+        <a href="{% url 'behavior:behavior_create' %}" class="btn btn-behac btn-sm"><i class="fas fa-plus"></i> New Record</a>
+    </div>
+    <div class="card">
+        <div class="card-body"><form method="get" class="row g-2 mb-3">
+                <div class="col-md-4">
+                    <input type="text" name="q" class="form-control" placeholder="Search student name or description..." value="{{ q }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="type" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="POS" {% if selected_type == 'POS' %}selected{% endif %}>Positive</option>
+                        <option value="NEG" {% if selected_type == 'NEG' %}selected{% endif %}>Negative</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="resolved" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="yes" {% if selected_resolved == 'yes' %}selected{% endif %}>Resolved</option>
+                        <option value="no" {% if selected_resolved == 'no' %}selected{% endif %}>Unresolved</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-behac w-100"><i class="fas fa-search"></i> Filter</button>
+                </div>
+            </form>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr><th>Student</th><th>Type</th><th>Description</th><th>Date</th><th>Resolved</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.student.full_name }}</td>
+                            <td>{% if record.behavior_type == 'POS' %}<span class="badge bg-success">Positive</span>{% else %}<span class="badge bg-danger">Negative</span>{% endif %}</td>
+                            <td>{{ record.description|truncatewords:10 }}</td>
+                            <td>{{ record.date }}</td>
+                            <td>{% if record.resolved %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-warning">No</span>{% endif %}</td>
+                            <td>
+                                <a href="{% url 'behavior:behavior_detail' record.pk %}" class="btn btn-sm btn-outline-info" title="View"><i class="fas fa-eye"></i></a>
+                                <a href="{% url 'behavior:behavior_update' record.pk %}" class="btn btn-sm btn-outline-success" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'behavior:behavior_delete' record.pk %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center">No behavior records found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
