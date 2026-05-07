@@ -32,7 +32,7 @@
                 <div class="card-body text-center py-3">
                     <i class="fas fa-user-graduate fa-2x mb-2"></i>
                     <h3 class="mb-0">{{ student_count }}</h3>
-                    <small>Students</small>
+                    <small>Pupils</small>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
                 <div class="card-header bg-dark text-white"><i class="fas fa-chalkboard"></i> My Classes</div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">
-                        <thead><tr><th>Class</th><th>Students</th></tr></thead>
+                        <thead><tr><th>Class</th><th>Pupils</th></tr></thead>
                         <tbody>
                             {% for cls in classes %}
                             <tr>
@@ -100,7 +100,7 @@
                 <div class="card-header bg-dark text-white"><i class="fas fa-chart-line"></i> Recent Results</div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">
-                        <thead><tr><th>Student</th><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead>
+                        <thead><tr><th>Pupil</th><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead>
                         <tbody>
                             {% for r in recent_results %}
                             <tr>

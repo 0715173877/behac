@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'core', 'students', 'academics', 'finance', 'behavior', 'staff', 'dashboard','locations'
+    'core', 'students', 'academics', 'finance', 'behavior', 'staff', 'dashboard', 'locations', 'website'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'dashboard.middleware.NoCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'behac_school.urls'
@@ -67,6 +68,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'academics.context_processors.academic_year_processor',
+                'academics.context_processors.pending_applications_processor',
+                'core.context_processors.school_info_processor',
             ],
         },
     },
@@ -154,6 +157,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+# Security: expire session when browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Security: idle timeout — auto-logout after 30 minutes of inactivity
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset the session expiry timer on each request
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

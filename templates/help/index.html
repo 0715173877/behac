@@ -1,0 +1,78 @@
+{% extends 'help/help_base.html' %}
+{% load static %}
+
+{% block help_content %}
+<!-- Overview -->
+<div class="help-section">
+    <h4><i class="fas fa-info-circle"></i> Welcome to the User Guide</h4>
+    <p class="text-muted">Select your role below to learn how to use the system effectively.</p>
+
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            <a href="{% url 'dashboard:help_admin' %}" class="text-decoration-none">
+                <div class="card help-card">
+                    <div class="card-body text-center">
+                        <div class="icon-circle bg-dark text-white mx-auto">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h5>Admin / Owner</h5>
+                        <p class="text-muted small">Manage the school, users, classes, and all system settings</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'dashboard:help_teacher' %}" class="text-decoration-none">
+                <div class="card help-card">
+                    <div class="card-body text-center">
+                        <div class="icon-circle bg-success text-white mx-auto">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h5>Teacher</h5>
+                        <p class="text-muted small">Record results, attendance, assignments, and manage behavior</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'dashboard:help_accountant' %}" class="text-decoration-none">
+                <div class="card help-card">
+                    <div class="card-body text-center">
+                        <div class="icon-circle bg-warning text-dark mx-auto">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h5>Accountant</h5>
+                        <p class="text-muted small">Record payments, manage fee structures, and generate reports</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'dashboard:help_parent' %}" class="text-decoration-none">
+                <div class="card help-card">
+                    <div class="card-body text-center">
+                        <div class="icon-circle bg-info text-white mx-auto">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h5>Parent</h5>
+                        <p class="text-muted small">Monitor your child's progress, payments, behavior, and timetable</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="help-section mt-4">
+    <h4><i class="fas fa-lightbulb"></i> Quick Tips</h4>
+    <div class="tip-box">
+        <i class="fas fa-info-circle"></i> <strong>Print any guide:</strong> Click the "Print / Save as PDF" button at the top of any guide page to save it as a PDF for offline reference.
+    </div>
+    <div class="tip-box">
+        <i class="fas fa-info-circle"></i> <strong>Change Password:</strong> Click "Change Password" at the bottom of the sidebar menu to update your login credentials.
+    </div>
+    <div class="tip-box">
+        <i class="fas fa-info-circle"></i> <strong>Need help?</strong> If you're stuck, contact the school administrator for assistance.
+    </div>
+</div>
+{% endblock %}

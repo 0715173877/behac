@@ -19,7 +19,7 @@
         {% endif %}
     <form method="get" class="row g-2 mb-3">
         <div class="col-md-5">
-            <input type="text" name="q" class="form-control" placeholder="Search student name..." value="{{ q }}">
+            <input type="text" name="q" class="form-control" placeholder="Search pupil name..." value="{{ q }}">
         </div>
         <div class="col-md-4">
             <select name="status" class="form-select">
@@ -36,7 +36,7 @@
     </form>
             <table class="table table-striped">
                 <thead class="table-success">
-                    <tr><th>Student</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+                    <tr><th>Pupil</th><th>Date</th><th>Status</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
                     {% for a in attendances %}

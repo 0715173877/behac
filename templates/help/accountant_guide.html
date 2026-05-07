@@ -1,0 +1,174 @@
+{% extends 'help/help_base.html' %}
+{% load static %}
+
+{% block help_content %}
+<div class="help-section">
+    <h4><i class="fas fa-calculator"></i> Accountant Guide</h4>
+    <p class="text-muted">As an Accountant, you manage all financial aspects of the school — recording payments, managing fee structures, and generating reports.</p>
+
+    <!-- Getting Started -->
+    <div class="help-section">
+        <h4>1. Getting Started</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Log In</strong>
+                <p>Go to the login page and enter your username and password provided by the school administrator.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Accountant Dashboard</strong>
+                <p>After logging in, you'll be taken to the Finance Dashboard showing revenue summaries, payment trends, and quick stats.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Navigate the Sidebar</strong>
+                <p>Use the sidebar on the left to access Payments, Finance Dashboard, Reports, Outstanding Balances, Fee Categories, and Fee Structures.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recording Payments -->
+    <div class="help-section">
+        <h4>2. Recording Payments</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Payments</strong>
+                <p>Click <strong>Payments</strong> in the sidebar under "Finance".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Record a New Payment</strong>
+                <p>Click <strong>Add Payment</strong>. Select the pupil, choose the fee category, enter the amount paid, and select the payment method (Cash, Bank, Mobile Money, etc.).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Receipt Number</strong>
+                <p>Each payment is automatically assigned a unique receipt number. You can also enter a manual receipt number if needed.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Bulk Upload Payments</strong>
+                <p>Click <strong>Bulk Upload</strong> to record multiple payments at once using a CSV file. Download the sample template to ensure correct formatting.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Always double-check the pupil name and amount before saving a payment. Once saved, payments can be edited but not deleted without admin approval.
+        </div>
+    </div>
+
+    <!-- Managing Fee Categories -->
+    <div class="help-section">
+        <h4>3. Managing Fee Categories</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Fee Categories</strong>
+                <p>Click <strong>Fee Categories</strong> in the sidebar under "Finance".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add a Category</strong>
+                <p>Click <strong>Add Category</strong>. Enter a name (e.g., Tuition, Transport, Lunch, Books) and an optional description.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Edit or Delete</strong>
+                <p>Use the edit or delete icons to manage existing categories. Note: you cannot delete a category that has payments or fee structures linked to it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managing Fee Structures -->
+    <div class="help-section">
+        <h4>4. Managing Fee Structures</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Fee Structures</strong>
+                <p>Click <strong>Fee Structures</strong> in the sidebar under "Finance".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add a Fee Structure</strong>
+                <p>Click <strong>Add Fee Structure</strong>. Select the class level, fee category, and enter the amount. This sets the expected fee for each category per class.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>View by Class</strong>
+                <p>The fee structure list shows all configured fees grouped by class level, making it easy to see what each pupil is expected to pay.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Set up fee structures at the beginning of each academic year. The system uses these to calculate outstanding balances automatically.
+        </div>
+    </div>
+
+    <!-- Generating Reports -->
+    <div class="help-section">
+        <h4>5. Generating Reports</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Finance Dashboard</strong>
+                <p>Click <strong>Finance</strong> in the sidebar to view charts and summaries of revenue by month and by category.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Payment Reports</strong>
+                <p>Click <strong>Reports</strong> to generate detailed payment reports. You can filter by date range, class, or pupil.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Outstanding Balances</strong>
+                <p>Click <strong>Outstanding</strong> to see a list of all pupils with unpaid fees. The report shows the expected amount, amount paid, and remaining balance.</p>
+            </div>
+        </div>
+        <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> Parents with outstanding balances will be blocked from viewing their child's progress, behavior, and other details until the balance is cleared.
+        </div>
+    </div>
+
+    <!-- Viewing Pupils -->
+    <div class="help-section">
+        <h4>6. Viewing Pupil Payment History</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>From Payments List</strong>
+                <p>In the Payments list, you can search by pupil name to see all payments made by a specific pupil.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>From Pupils List</strong>
+                <p>Click <strong>Pupils</strong> under "Records" to view a pupil's profile, which includes their payment summary.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

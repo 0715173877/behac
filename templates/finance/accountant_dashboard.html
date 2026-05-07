@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-3">
             <div class="card bg-danger text-white text-center py-3">
-                <small>Outstanding Students</small>
+                <small>Outstanding Pupils</small>
                 <h3 class="mb-0">{{ outstanding_count }}</h3>
             </div>
         </div>
@@ -87,17 +87,17 @@
         </div>
     </div>
 
-    <!-- Outstanding Students -->
+    <!-- Outstanding Pupils -->
     <div class="card mb-3">
         <div class="card-header bg-danger text-white d-flex justify-content-between">
-            <span><i class="fas fa-exclamation-triangle"></i> Students with Outstanding Balances</span>
-            <span class="badge bg-light text-dark">{{ outstanding_count }} student(s)</span>
+            <span><i class="fas fa-exclamation-triangle"></i> Pupils with Outstanding Balances</span>
+            <span class="badge bg-light text-dark">{{ outstanding_count }} pupil(s)</span>
         </div>
         <div class="card-body">
             {% if outstanding_students %}
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-hover">
-                    <thead><tr><th>#</th><th>Student</th><th>Class</th><th>Expected Fee</th><th>Paid</th><th>Balance</th></tr></thead>
+                    <thead><tr><th>#</th><th>Pupil</th><th>Class</th><th>Expected Fee</th><th>Paid</th><th>Balance</th></tr></thead>
                     <tbody>
                         {% for item in outstanding_students %}
                         <tr class="{% if item.balance > 0 %}table-danger{% endif %}">
@@ -113,7 +113,7 @@
                 </table>
             </div>
             {% else %}
-            <p class="text-muted">All students have cleared their balances! <i class="fas fa-check-circle text-success"></i></p>
+            <p class="text-muted">All pupils have cleared their balances! <i class="fas fa-check-circle text-success"></i></p>
             {% endif %}
         </div>
     </div>
@@ -124,7 +124,7 @@
         <div class="card-body">
             {% if recent_payments %}
             <table class="table table-sm">
-                <thead><tr><th>Date</th><th>Student</th><th>Category</th><th>Amount</th><th>Receipt</th></tr></thead>
+                <thead><tr><th>Date</th><th>Pupil</th><th>Category</th><th>Amount</th><th>Receipt</th></tr></thead>
                 <tbody>
                     {% for p in recent_payments %}
                     <tr>

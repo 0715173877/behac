@@ -1,0 +1,132 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}About Us - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE HEADER ====== -->
+<section class="page-header">
+    <div class="container">
+        <h1>About Us</h1>
+        <p>Learn about our mission, vision, and commitment to excellence.</p>
+    </div>
+</section>
+
+<!-- ====== ABOUT CONTENT ====== -->
+<section class="section">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <h2 style="color:var(--primary-dark);font-weight:700;margin-bottom:20px;">Welcome to {{ school_info.name|default:"Behac International Academy" }}</h2>
+                <div class="about-content">
+                    {% if about_info.about_paragraph_1 %}
+                    <p>{{ about_info.about_paragraph_1 }}</p>
+                    {% else %}
+                    <p>
+                        At {{ school_info.name|default:"Behac International Academy" }}, we believe that education is the most powerful tool for transforming lives and communities. Our school is dedicated to providing a nurturing, inclusive, and academically rigorous environment where every child can reach their full potential.
+                    </p>
+                    {% endif %}
+                    {% if about_info.about_paragraph_2 %}
+                    <p>{{ about_info.about_paragraph_2 }}</p>
+                    {% else %}
+                    <p>
+                        Founded with a vision to deliver quality education that blends academic excellence with strong moral values, we have grown into a vibrant learning community that serves pupils from diverse backgrounds.
+                    </p>
+                    {% endif %}
+                    {% if about_info.about_paragraph_3 %}
+                    <p>{{ about_info.about_paragraph_3 }}</p>
+                    {% else %}
+                    <p>
+                        Our curriculum is designed to foster critical thinking, creativity, and a lifelong love for learning. We offer a comprehensive range of subjects and co-curricular activities that ensure holistic development.
+                    </p>
+                    {% endif %}
+                    {% if about_info.about_paragraph_4 %}
+                    <p>{{ about_info.about_paragraph_4 }}</p>
+                    {% else %}
+                    <p>
+                        We are proud of our dedicated team of qualified teachers who go above and beyond to support each pupil's unique learning journey. With small class sizes and personalized attention, we ensure that no child is left behind.
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div style="background:var(--primary-bg);border-radius:20px;padding:40px;text-align:center;">
+                    <i class="bi bi-mortarboard-fill" style="font-size:4rem;color:var(--primary-dark);margin-bottom:20px;"></i>
+                    <h4 style="color:var(--primary-dark);font-weight:600;">Our Motto</h4>
+                    <p style="font-size:1.2rem;font-style:italic;color:#555;">"{{ school_info.motto|default:"Empowering Minds, Shaping Futures" }}"</p>
+                    <hr style="margin:30px 0;opacity:0.2;">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <div class="stat-number">{{ about_info.stat_pupils|default:"500+" }}</div>
+                            <div class="stat-label">Pupils</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number">{{ about_info.stat_teachers|default:"30+" }}</div>
+                            <div class="stat-label">Teachers</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number">{{ about_info.stat_years|default:"10+" }}</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== MISSION & VISION ====== -->
+<section class="section bg-soft">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="feature-card" style="text-align:left;">
+                    <div class="icon" style="margin:0 0 20px 0;"><i class="bi bi-bullseye"></i></div>
+                    <h5>Our Mission</h5>
+                    {% if about_info.mission %}
+                    <p>{{ about_info.mission }}</p>
+                    {% else %}
+                    <p>To provide quality, affordable education that equips pupils with knowledge, skills, and values necessary to become responsible citizens and future leaders.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card" style="text-align:left;">
+                    <div class="icon" style="margin:0 0 20px 0;"><i class="bi bi-eye"></i></div>
+                    <h5>Our Vision</h5>
+                    {% if about_info.vision %}
+                    <p>{{ about_info.vision }}</p>
+                    {% else %}
+                    <p>To be a leading educational institution recognized for academic excellence, character development, and innovation in teaching and learning.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== CORE VALUES (Dynamic) ====== -->
+{% if core_values %}
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Core Values</h2>
+            <p>The principles that guide everything we do.</p>
+        </div>
+        <div class="row g-4">
+            {% for value in core_values %}
+            <div class="col-md-3 col-6">
+                <div class="feature-card">
+                    <div class="icon"><i class="bi {{ value.icon }}"></i></div>
+                    <h5>{{ value.title }}</h5>
+                    <p>{{ value.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

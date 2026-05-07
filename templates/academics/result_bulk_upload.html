@@ -13,14 +13,14 @@
                 <i class="fas fa-info-circle"></i> 
                 Upload an Excel file (.xlsx) with the following columns: 
                 <strong>registration_number, full_name, subject_code, exam_name, marks_obtained, teacher_comment</strong>.<br>
-                <strong>Tip:</strong> You can use either <code>registration_number</code> or <code>full_name</code> to identify students.
+                <strong>Tip:</strong> You can use either <code>registration_number</code> or <code>full_name</code> to identify pupils.
                 The downloaded template includes both columns pre-filled for you.
             </div>
 
             <!-- Template Download with Pre-fill Options -->
             <div class="card bg-light mb-4">
                 <div class="card-header bg-behac text-white">
-                    <i class="fas fa-download"></i> Step 1: Download Template (pre-filled with students)
+                    <i class="fas fa-download"></i> Step 1: Download Template (pre-filled with pupils)
                 </div>
                 <div class="card-body">
                     <form method="get" action="{% url 'academics:result_download_template' %}" class="row g-3 align-items-end">
@@ -54,7 +54,7 @@
                     </form>
                     <small class="text-muted mt-2 d-block">
                         <i class="fas fa-info-circle"></i> 
-                        Select class and subject to get a template pre-filled with student names and registration numbers.
+                        Select class and subject to get a template pre-filled with pupil names and registration numbers.
                         Just fill in the <strong>marks_obtained</strong> and <strong>teacher_comment</strong> columns.
                     </small>
                 </div>

@@ -1,0 +1,253 @@
+{% extends 'help/help_base.html' %}
+{% load static %}
+
+{% block help_content %}
+<div class="help-section">
+    <h4><i class="fas fa-user-friends"></i> Parent Guide</h4>
+    <p class="text-muted">As a Parent, you can monitor your child's academic progress, payments, behavior, attendance, and timetable — all from your personal dashboard.</p>
+
+    <!-- Getting Started -->
+    <div class="help-section">
+        <h4>1. Getting Started</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Log In</strong>
+                <p>Go to the login page. Use the email address you registered with as your username. Your default password is <strong>parent123</strong> (provided by the school).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Change Your Password</strong>
+                <p>After your first login, click <strong>Change Password</strong> at the bottom of the sidebar to set a new, secure password.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Select Your Child</strong>
+                <p>If you have more than one child in the school, use the dropdown at the top of the dashboard to switch between them.</p>
+            </div>
+        </div>
+        <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Outstanding Balance:</strong> If you have unpaid school fees, you will be blocked from viewing your child's progress, behavior, and other details until the balance is cleared. Please contact the school accountant to make payments.
+        </div>
+    </div>
+
+    <!-- Dashboard Overview -->
+    <div class="help-section">
+        <h4>2. Dashboard Overview</h4>
+        <p>Your main dashboard shows a summary of your child's information at a glance:</p>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-check"></i></div>
+            <div class="step-content">
+                <strong>Quick Stats</strong>
+                <p>See your child's class, total paid fees, balance, attendance summary (present/absent/late), and recent achievements.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-check"></i></div>
+            <div class="step-content">
+                <strong>Recent Results</strong>
+                <p>View the most recent exam results and see how your child is performing across subjects.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-check"></i></div>
+            <div class="step-content">
+                <strong>Upcoming Assignments</strong>
+                <p>See homework and assignments that are due soon so you can help your child stay on track.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-check"></i></div>
+            <div class="step-content">
+                <strong>Payment Summary</strong>
+                <p>A chart shows payments made throughout the year so you can track what has been paid.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Progress -->
+    <div class="help-section">
+        <h4>3. Viewing Full Progress</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Full Progress</strong>
+                <p>Click <strong>Full Progress</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>View Results by Term</strong>
+                <p>Results are organized by academic year and term. You can see scores for each subject across different exams.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Track Improvement</strong>
+                <p>Compare results across terms to see how your child is improving over time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="help-section">
+        <h4>4. Viewing Payments</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Payments</strong>
+                <p>Click <strong>Payments</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>View Payment History</strong>
+                <p>See a complete list of all payments made, including dates, amounts, receipt numbers, and fee categories.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Check Balance</strong>
+                <p>The top of the page shows your total paid, expected fees, and any outstanding balance.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> If you see an outstanding balance, contact the school accountant to make a payment. Once paid, your access will be restored.
+        </div>
+    </div>
+
+    <!-- Behavior -->
+    <div class="help-section">
+        <h4>5. Viewing Behavior Records</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Behavior</strong>
+                <p>Click <strong>Behavior</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>View Incidents</strong>
+                <p>See a log of behavior incidents recorded by teachers, including the type (Positive/Negative), description, date, and severity.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Positive Recognition</strong>
+                <p>Positive behavior records highlight good conduct, helpfulness, and other commendable actions by your child.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance -->
+    <div class="help-section">
+        <h4>6. Viewing Attendance</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Attendance</strong>
+                <p>Click <strong>Attendance</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>View Attendance Records</strong>
+                <p>See a daily log of your child's attendance — marked as Present (P), Absent (A), or Late (L).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Attendance Summary</strong>
+                <p>The dashboard shows a summary of total present, absent, and late days for quick reference.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timetable -->
+    <div class="help-section">
+        <h4>7. Viewing Timetable</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Timetable</strong>
+                <p>Click <strong>Timetable</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Weekly Schedule</strong>
+                <p>View your child's weekly class schedule showing subjects, teachers, and time periods for each day.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Upcoming Assignments</strong>
+                <p>The timetable page also shows upcoming assignments and their due dates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="help-section">
+        <h4>8. Viewing Achievements</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Achievements</strong>
+                <p>Click <strong>Achievements</strong> in the sidebar under "My Child".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>View Awards</strong>
+                <p>See all achievements and certificates awarded to your child, including the title, description, and date awarded.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Celebrate your child's achievements with them! Positive reinforcement encourages good performance and behavior.
+        </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="help-section">
+        <h4>9. Troubleshooting</h4>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-question"></i></div>
+            <div class="step-content">
+                <strong>Can't log in?</strong>
+                <p>Contact the school administrator to reset your password or verify your account.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-question"></i></div>
+            <div class="step-content">
+                <strong>No child linked to my account?</strong>
+                <p>Contact the school administrator to link your child's record to your parent account.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number"><i class="fas fa-question"></i></div>
+            <div class="step-content">
+                <strong>Page says I'm blocked?</strong>
+                <p>This means there is an outstanding fee balance. Contact the school accountant to make a payment and restore your access.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

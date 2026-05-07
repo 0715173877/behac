@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Behac International Academy</title>
+    <title>{{ school_info.name|default:"Behac International Academy" }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --behac-dark: #1B5E20;
-            --behac-light: #4CAF50;
-            --behac-bg: #E8F5E9;
+            --behac-dark: {{ school_info.primary_dark|default:"#1B5E20" }};
+            --behac-light: {{ school_info.primary_light|default:"#4CAF50" }};
+            --behac-bg: {{ school_info.primary_bg|default:"#E8F5E9" }};
             --sidebar-width: 250px;
         }
         body {
@@ -223,7 +223,12 @@
             <i class="fas fa-bars"></i>
         </button>
         <a class="topbar-brand" href="{% url 'dashboard:home' %}">
-            <img src="/static/images/behac_logo.png" alt="Logo"> Behac International Academy
+            {% if school_info.logo %}
+            <img src="{{ school_info.logo.url }}" alt="Logo">
+            {% else %}
+            <img src="/static/images/behac_logo.png" alt="Logo">
+            {% endif %}
+            {{ school_info.name|default:"Behac International Academy" }}
         </a>
         {% if current_year %}
         <span class="badge bg-light text-dark ms-2 p-2 border" style="font-size: 0.75rem;">
@@ -258,7 +263,7 @@
         {% if user.is_authenticated %}
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'dashboard:home' %}">
+                <a class="nav-link {% if request.path == '/' or '/dashboard/' in request.path %}active{% endif %}" href="{% url 'dashboard:home' %}">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>
@@ -267,47 +272,47 @@
             {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Teacher' in user_groups|join:', ' %}
             <li class="nav-section">Academics</li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/result/' in request.path %}active{% endif %}" href="{% url 'academics:result_list' %}"><i class="fas fa-chart-line"></i> Results</a>
+                <a class="nav-link {% if '/academics/results/' in request.path %}active{% endif %}" href="{% url 'academics:result_list' %}"><i class="fas fa-chart-line"></i> Results</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if '/academics/attendance/' in request.path %}active{% endif %}" href="{% url 'academics:attendance_list' %}"><i class="fas fa-calendar-check"></i> Attendance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/assignment/' in request.path %}active{% endif %}" href="{% url 'academics:assignment_list' %}"><i class="fas fa-tasks"></i> Assignments</a>
+                <a class="nav-link {% if '/academics/assignments/' in request.path %}active{% endif %}" href="{% url 'academics:assignment_list' %}"><i class="fas fa-tasks"></i> Assignments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/exam/' in request.path %}active{% endif %}" href="{% url 'academics:exam_list' %}"><i class="fas fa-pencil-alt"></i> Exams</a>
+                <a class="nav-link {% if '/academics/exams/' in request.path %}active{% endif %}" href="{% url 'academics:exam_list' %}"><i class="fas fa-pencil-alt"></i> Exams</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/timetable/' in request.path %}active{% endif %}" href="{% url 'academics:timetable_list' %}"><i class="fas fa-calendar-alt"></i> Timetable</a>
+                <a class="nav-link {% if '/academics/timetables/' in request.path %}active{% endif %}" href="{% url 'academics:timetable_list' %}"><i class="fas fa-calendar-alt"></i> Timetable</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/subject/' in request.path %}active{% endif %}" href="{% url 'academics:subject_list' %}"><i class="fas fa-book"></i> Subjects</a>
+                <a class="nav-link {% if '/academics/subjects/' in request.path %}active{% endif %}" href="{% url 'academics:subject_list' %}"><i class="fas fa-book"></i> Subjects</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/academics/classlevel/' in request.path %}active{% endif %}" href="{% url 'academics:classlevel_list' %}"><i class="fas fa-school"></i> Classes</a>
+                <a class="nav-link {% if '/academics/classes/' in request.path %}active{% endif %}" href="{% url 'academics:classlevel_list' %}"><i class="fas fa-school"></i> Classes</a>
             </li>
             {% endif %}
 
             {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Accountant' in user_groups|join:', ' %}
             <li class="nav-section">Finance</li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/payment/' in request.path %}active{% endif %}" href="{% url 'finance:payment_list' %}"><i class="fas fa-money-bill-wave"></i> Payments</a>
+                <a class="nav-link {% if '/finance/payments/' in request.path %}active{% endif %}" href="{% url 'finance:payment_list' %}"><i class="fas fa-money-bill-wave"></i> Payments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/accountant/' in request.path %}active{% endif %}" href="{% url 'finance:accountant_dashboard' %}"><i class="fas fa-chart-pie"></i> Finance</a>
+                <a class="nav-link {% if '/finance/dashboard/' in request.path %}active{% endif %}" href="{% url 'finance:accountant_dashboard' %}"><i class="fas fa-chart-pie"></i> Finance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/payment_report/' in request.path %}active{% endif %}" href="{% url 'finance:payment_report' %}"><i class="fas fa-file-invoice"></i> Reports</a>
+                <a class="nav-link {% if '/finance/reports/' in request.path %}active{% endif %}" href="{% url 'finance:payment_report' %}"><i class="fas fa-file-invoice"></i> Reports</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/outstanding/' in request.path %}active{% endif %}" href="{% url 'finance:outstanding_report' %}"><i class="fas fa-exclamation-triangle"></i> Outstanding</a>
+                <a class="nav-link {% if '/finance/reports/outstanding/' in request.path %}active{% endif %}" href="{% url 'finance:outstanding_report' %}"><i class="fas fa-exclamation-triangle"></i> Outstanding</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/category/' in request.path %}active{% endif %}" href="{% url 'finance:category_list' %}"><i class="fas fa-tags"></i> Fee Categories</a>
+                <a class="nav-link {% if '/finance/categories/' in request.path %}active{% endif %}" href="{% url 'finance:category_list' %}"><i class="fas fa-tags"></i> Fee Categories</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/feestructure/' in request.path %}active{% endif %}" href="{% url 'finance:feestructure_list' %}"><i class="fas fa-dollar-sign"></i> Fee Structures</a>
+                <a class="nav-link {% if '/finance/structures/' in request.path %}active{% endif %}" href="{% url 'finance:feestructure_list' %}"><i class="fas fa-dollar-sign"></i> Fee Structures</a>
             </li>
             {% endif %}
 
@@ -320,12 +325,21 @@
                 <a class="nav-link {% if '/core/terms/' in request.path %}active{% endif %}" href="{% url "core:term_list" %}"><i class="fas fa-calendar-week"></i> Terms</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/teachers/' in request.path and not '/students/' in request.path and not '/teachers/users/' in request.path %}active{% endif %}" href="{% url 'staff:teacher_list' %}"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
+                <a class="nav-link {% if '/teachers/' in request.path and not '/teachers/users/' in request.path %}active{% endif %}" href="{% url 'staff:teacher_list' %}"><i class="fas fa-chalkboard-teacher"></i> Teachers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if '/teachers/users/' in request.path %}active{% endif %}" href="{% url 'staff:user_list' %}"><i class="fas fa-users-cog"></i> Users</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/applications/' in request.path %}active{% endif %}" href="{% url 'dashboard:application_list' %}">
+                    <i class="fas fa-file-signature"></i> Applications
+                    {% if pending_applications > 0 %}
+                    <span class="badge bg-danger ms-auto">{{ pending_applications }}</span>
+                    {% endif %}
+                </a>
+            </li>
             {% if 'Owner' not in user_groups|join:', ' or user.is_superuser %}
+
             <li class="nav-item">
                 <a class="nav-link {% if '/admin/' in request.path %}active{% endif %}" href="/admin/"><i class="fas fa-cog"></i> Admin Panel</a>
             </li>
@@ -335,18 +349,28 @@
             {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Teacher' in user_groups|join:', ' %}
             <li class="nav-section">Records</li>
             <li class="nav-item">
-                <a class="nav-link {% if '/students/' in request.path %}active{% endif %}" href="{% url 'students:list' %}"><i class="fas fa-users"></i> Students</a>
+                <a class="nav-link {% if '/students/' in request.path %}active{% endif %}" href="{% url 'students:list' %}"><i class="fas fa-users"></i> Pupils</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/behavior/records/' in request.path or '/behavior/record/' in request.path %}active{% endif %}" href="{% url 'behavior:behavior_list' %}"><i class="fas fa-exclamation-triangle"></i> Behavior</a>
+                <a class="nav-link {% if '/behavior/records/' in request.path %}active{% endif %}" href="{% url 'behavior:behavior_list' %}"><i class="fas fa-exclamation-triangle"></i> Behavior</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/behavior/achievement/' in request.path %}active{% endif %}" href="{% url 'behavior:achievement_list' %}"><i class="fas fa-trophy"></i> Achievements</a>
+                <a class="nav-link {% if '/behavior/achievements/' in request.path %}active{% endif %}" href="{% url 'behavior:achievement_list' %}"><i class="fas fa-trophy"></i> Achievements</a>
             </li>
             {% endif %}
 
+            <li class="nav-section">Links</li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'website_home' %}" target="_blank"><i class="fas fa-globe"></i> Website</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if '/dashboard/help/' in request.path %}active{% endif %}" href="{% url 'dashboard:help_index' %}"><i class="fas fa-question-circle"></i> Help</a>
+            </li>
+
+
             {% if 'Parent' in user_groups|join:', ' %}
             <li class="nav-section">My Child</li>
+
             <li class="nav-item">
                 <a class="nav-link {% if '/dashboard/parent/' == request.path %}active{% endif %}" href="{% url 'dashboard:parent' %}"><i class="fas fa-tachometer-alt"></i> Overview</a>
             </li>
@@ -371,6 +395,11 @@
             {% endif %}
             {% endwith %}
         </ul>
+        <div class="border-top mt-2 pt-2 px-3">
+            <a class="nav-link d-inline-block px-0" href="{% url 'password_change' %}">
+                <i class="fas fa-key"></i> Change Password
+            </a>
+        </div>
         {% endif %}
     </div>
     {% endif %}
@@ -388,7 +417,7 @@
         {% block content %}{% endblock %}
         
         <div class="main-footer">
-            &copy; {% now "Y" %} Behac International Academy – For Smart People. All rights reserved.
+            &copy; {% now "Y" %} {{ school_info.name|default:"Behac International Academy" }} – {{ school_info.tagline|default:"For Smart People" }}. All rights reserved.
         </div>
     </div>
 

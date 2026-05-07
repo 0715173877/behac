@@ -39,7 +39,7 @@
 <div class="container-fluid">
     <div class="page-header">
         <h2><i class="fas fa-user-graduate"></i> {{ student.full_name }}</h2>
-        <div class="no-print">
+        <div class="no-print"></div>
             <a href="{% url 'students:update' student.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
             {% if user.is_superuser or 'Admin' in user.groups.all|join:', ' %}
             <a href="{% url 'students:delete' student.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</a>

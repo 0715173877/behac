@@ -4,13 +4,13 @@
 <body style="font-family: Arial;">
     <div style="text-align:center; margin-bottom:20px;">
         <img src="https://via.placeholder.com/80?text=Logo" style="height:60px;">
-        <h2>Behac International Academy</h2>
-        <p>“For Smart People”</p>
+        <h2>{{ school_info.name|default:"Behac International Academy" }}</h2>
+        <p>“{{ school_info.tagline|default:"For Smart People" }}”</p>
     </div>
     <hr>
     <h3>Payment Receipt</h3>
     <p><strong>Receipt No:</strong> {{ payment.receipt_number }}</p>
-    <p><strong>Student:</strong> {{ payment.student.full_name }} ({{ payment.student.current_class }})</p>
+    <p><strong>Pupil:</strong> {{ payment.student.full_name }} ({{ payment.student.current_class }})</p>
     <p><strong>Fee Category:</strong> {{ payment.fee_category.name }}</p>
     <p><strong>Amount:</strong> {{ payment.amount_paid }} TZS</p>
     <p><strong>Date:</strong> {{ payment.payment_date }}</p>

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block extra_head %}
+<style>
+.app-card {
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+.app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.status-badge {
+    font-size: 0.8rem;
+    padding: 0.3em 0.6em;
+}
+.filter-btn {
+    border-radius: 20px;
+    padding: 0.25rem 1rem;
+    font-size: 0.85rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header d-flex justify-content-between align-items-center mb-3">
+        <h3><i class="fas fa-file-alt text-behac"></i> Admission Applications</h3>
+        <div>
+            <span class="badge bg-secondary">{{ total_count }} Total</span>
+        </div>
+    </div>
+
+    <!-- Status Summary Cards -->
+    <div class="row g-2 mb-3">
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-info text-white text-center py-2 app-card">
+                <h5 class="mb-0">{{ total_count }}</h5>
+                <small>Total</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-warning text-dark text-center py-2 app-card">
+                <h5 class="mb-0">{{ pending_count }}</h5>
+                <small>Pending</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-success text-white text-center py-2 app-card">
+                <h5 class="mb-0">{{ approved_count }}</h5>
+                <small>Approved</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card border-0 shadow-sm bg-danger text-white text-center py-2 app-card">
+                <h5 class="mb-0">{{ rejected_count }}</h5>
+                <small>Rejected</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter & Bulk Actions -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="btn-group btn-group-sm">
+            <a href="{% url 'dashboard:application_list' %}" class="btn btn-outline-secondary filter-btn {% if not current_filter %}active{% endif %}">All</a>
+            <a href="{% url 'dashboard:application_list' %}?status=pending" class="btn btn-outline-warning filter-btn {% if current_filter == 'pending' %}active{% endif %}">Pending</a>
+            <a href="{% url 'dashboard:application_list' %}?status=approved" class="btn btn-outline-success filter-btn {% if current_filter == 'approved' %}active{% endif %}">Approved</a>
+            <a href="{% url 'dashboard:application_list' %}?status=rejected" class="btn btn-outline-danger filter-btn {% if current_filter == 'rejected' %}active{% endif %}">Rejected</a>
+        </div>
+        {% if pending_count > 0 %}
+        <form method="post" action="{% url 'dashboard:application_bulk_approve' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Approve ALL {{ pending_count }} pending applications? This will auto-enroll pupils and create parent accounts.')">
+                <i class="fas fa-check-double"></i> Approve All Pending
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Applications Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Child Name</th>
+                            <th>Grade</th>
+                            <th>Parent Name</th>
+                            <th>Mobile</th>
+                            <th>Submitted</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'dashboard:application_detail' app.pk %}" class="text-decoration-none fw-bold">
+                                    {{ app.child_first_name }} {{ app.child_last_name }}
+                                </a>
+                            </td>
+                            <td>{{ app.grade_applying_for.name }}</td>
+                            <td>{{ app.parent_full_name }}</td>
+                            <td>{{ app.parent_mobile }}</td>
+                            <td><small>{{ app.submitted_at|date:"d/m/Y H:i" }}</small></td>
+                            <td>
+                                {% if app.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark status-badge">Pending</span>
+                                {% elif app.status == 'approved' %}
+                                    <span class="badge bg-success status-badge">Approved</span>
+                                {% elif app.status == 'rejected' %}
+                                    <span class="badge bg-danger status-badge">Rejected</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'dashboard:application_detail' app.pk %}" class="btn btn-outline-info" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if app.status == 'pending' %}
+                                    <a href="{% url 'dashboard:application_approve' app.pk %}" class="btn btn-outline-success" title="Approve" onclick="return confirm('Approve application for {{ app.child_first_name }} {{ app.child_last_name }}? This will auto-enroll the pupil.')">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                    <a href="{% url 'dashboard:application_reject' app.pk %}" class="btn btn-outline-danger" title="Reject" onclick="return confirm('Reject application for {{ app.child_first_name }} {{ app.child_last_name }}?')">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                No applications found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

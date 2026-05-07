@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-body"><form method="get" class="row g-2 mb-3">
                 <div class="col-md-4">
-                    <input type="text" name="q" class="form-control" placeholder="Search student name or description..." value="{{ q }}">
+                    <input type="text" name="q" class="form-control" placeholder="Search pupil name or description..." value="{{ q }}">
                 </div>
                 <div class="col-md-3">
                     <select name="type" class="form-select">
@@ -32,7 +32,7 @@
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
-                        <tr><th>Student</th><th>Type</th><th>Description</th><th>Date</th><th>Resolved</th><th>Actions</th></tr>
+                        <tr><th>Pupil</th><th>Type</th><th>Description</th><th>Date</th><th>Resolved</th><th>Actions</th></tr>
                     </thead>
                     <tbody>
                         {% for record in records %}

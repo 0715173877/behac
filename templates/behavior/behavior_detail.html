@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-body">
             <table class="table table-bordered">
-                <tr><th>Student</th><td>{{ record.student.full_name }}</td></tr>
+                <tr><th>Pupil</th><td>{{ record.student.full_name }}</td></tr>
                 <tr><th>Type</th><td>{% if record.behavior_type == 'POS' %}<span class="badge bg-success">Positive</span>{% else %}<span class="badge bg-danger">Negative</span>{% endif %}</td></tr>
                 <tr><th>Description</th><td>{{ record.description }}</td></tr>
                 <tr><th>Action Taken</th><td>{{ record.action_taken|default:'None' }}</td></tr>

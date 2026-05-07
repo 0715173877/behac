@@ -10,7 +10,7 @@
     <div class="card-header">Recent Payments</div>
     <div class="card-body p-0">
         <table class="table">
-            <thead><tr><th>Student</th><th>Category</th><th>Amount</th><th>Date</th></tr></thead>
+            <thead><tr><th>Pupil</th><th>Category</th><th>Amount</th><th>Date</th></tr></thead>
             <tbody>
                 {% for p in payments %}
                 <tr><td>{{ p.student.full_name }}</td><td>{{ p.fee_category.name }}</td><td>${{ p.amount_paid }}</td><td>{{ p.payment_date }}</td></tr>

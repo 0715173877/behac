@@ -11,7 +11,7 @@
 <div class="card shadow">
     <div class="card-body"><form method="get" class="row g-2 mb-3">
     <div class="col-md-5">
-        <input type="text" name="q" class="form-control" placeholder="Search by student name or receipt number..." value="{{ q }}">
+        <input type="text" name="q" class="form-control" placeholder="Search by pupil name or receipt number..." value="{{ q }}">
     </div>
     <div class="col-md-4">
         <select name="category" class="form-select">
@@ -28,7 +28,7 @@
 
         <table class="table table-striped">
             <thead>
-                <tr><th>Receipt No</th><th>Student</th><th>Category</th><th>Amount</th><th>Date</th><th>Month</th><th>Actions</th></tr>
+                <tr><th>Receipt No</th><th>Pupil</th><th>Category</th><th>Amount</th><th>Date</th><th>Month</th><th>Actions</th></tr>
             </thead>
             <tbody>
                 {% for p in payments %}

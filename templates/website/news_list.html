@@ -1,0 +1,53 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}News - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE HEADER ====== -->
+<section class="page-header">
+    <div class="container">
+        <h1>News & Updates</h1>
+        <p>Stay informed with the latest news and events from our school.</p>
+    </div>
+</section>
+
+<!-- ====== NEWS LIST ====== -->
+<section class="section">
+    <div class="container">
+        {% if news_list %}
+            <div class="row g-4">
+                {% for news in news_list %}
+                <div class="col-md-4">
+                    <div class="news-card">
+                        <div class="news-img">
+                            {% if news.image %}
+                                <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                            {% else %}
+                                <i class="bi bi-newspaper"></i>
+                            {% endif %}
+                        </div>
+                        <div class="news-body">
+                            <div class="news-date"><i class="bi bi-calendar3"></i> {{ news.published_at|date:"F j, Y" }}</div>
+                            <h5>{{ news.title }}</h5>
+                            <p>{{ news.content|truncatewords:25 }}</p>
+                            <a href="{% url 'website_news_detail' news.pk %}" class="btn btn-sm" style="background:var(--primary-dark);color:white;border-radius:25px;padding:8px 20px;">
+                                Read More <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-newspaper" style="font-size:4rem;color:#ccc;"></i>
+                <h4 style="color:#999;margin-top:20px;">No news articles yet</h4>
+                <p style="color:#aaa;">Check back later for updates.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

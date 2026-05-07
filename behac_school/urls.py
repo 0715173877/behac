@@ -12,10 +12,17 @@ urlpatterns = [
     path('teachers/', include('staff.urls')),
     path('behavior/', include('behavior.urls')),
     path('core/', include('core.urls')),
-    path('', dashboard_views.home_page, name='home'),
+    path('', include('website.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page=reverse_lazy('login')), name='logout'),
+    path('logout/', dashboard_views.CustomLogoutView.as_view(), name='logout'),
+    path('password-change/', auth_views.PasswordChangeView.as_view(
+        template_name='registration/password_change_form.html',
+        success_url=reverse_lazy('password_change_done')
+    ), name='password_change'),
+    path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name='registration/password_change_done.html'
+    ), name='password_change_done'),
 ]
 
 # For serving static/media in development only

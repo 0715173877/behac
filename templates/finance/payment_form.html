@@ -7,11 +7,11 @@
         <div class="card shadow">
             <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="fas fa-money-bill-wave"></i> {% if form.instance.pk %}Edit Payment{% else %}Record Payment{% endif %}</h4>
-                <a href="{% url 'finance:select_student' %}" class="btn btn-light btn-sm"><i class="fas fa-exchange-alt"></i> Change Student</a>
+                <a href="{% url 'finance:select_student' %}" class="btn btn-light btn-sm"><i class="fas fa-exchange-alt"></i> Change Pupil</a>
             </div>
             <div class="card-body">
                 
-                <!-- Selected Student Info -->
+                <!-- Selected Pupil Info -->
                 {% if selected_student %}
                 <div class="alert alert-success d-flex justify-content-between">
                     <div>
@@ -27,9 +27,9 @@
                     
                     {% if not selected_student %}
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Student *</label>
+                        <label class="form-label fw-bold">Pupil *</label>
                         {{ form.student }}
-                        <small class="text-muted"><a href="{% url 'finance:select_student' %}">Search for a student</a></small>
+                        <small class="text-muted"><a href="{% url 'finance:select_student' %}">Search for a pupil</a></small>
                     </div>
                     {% else %}
                     {{ form.student }}
@@ -58,7 +58,7 @@
                     </div>
                     
                     <div class="d-flex justify-content-between mt-3">
-                        <a href="{% url 'finance:select_student' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Students</a>
+                        <a href="{% url 'finance:select_student' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Pupils</a>
                         <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save Payment</button>
                     </div>
                 </form>

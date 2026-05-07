@@ -1,0 +1,172 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Admissions - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE HEADER ====== -->
+<section class="page-header">
+    <div class="container">
+        <h1>Admissions</h1>
+        <p>Apply to join {{ school_info.name|default:"Behac International Academy" }}. We look forward to welcoming you!</p>
+    </div>
+</section>
+
+<!-- ====== APPLICATION FORM ====== -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                            <i class="bi bi-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="form-section">
+                    <h3 style="color:var(--primary-dark);font-weight:600;margin-bottom:10px;">
+                        <i class="bi bi-pencil-square"></i> Application Form
+                    </h3>
+                    <p style="color:#666;margin-bottom:30px;">Please fill in all required fields to apply for admission.</p>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Child's Information -->
+                        <h5 style="color:var(--primary-dark);font-weight:600;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--primary-bg);">
+                            <i class="bi bi-person"></i> Child's Information
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.child_first_name.label }} <span style="color:red;">*</span></label>
+                                {{ form.child_first_name }}
+                                {% if form.child_first_name.errors %}<div class="text-danger small mt-1">{{ form.child_first_name.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.child_middle_name.label }}</label>
+                                {{ form.child_middle_name }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.child_last_name.label }} <span style="color:red;">*</span></label>
+                                {{ form.child_last_name }}
+                                {% if form.child_last_name.errors %}<div class="text-danger small mt-1">{{ form.child_last_name.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.child_date_of_birth.label }} <span style="color:red;">*</span></label>
+                                {{ form.child_date_of_birth }}
+                                {% if form.child_date_of_birth.errors %}<div class="text-danger small mt-1">{{ form.child_date_of_birth.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.child_gender.label }} <span style="color:red;">*</span></label>
+                                {{ form.child_gender }}
+                                {% if form.child_gender.errors %}<div class="text-danger small mt-1">{{ form.child_gender.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.child_birth_certificate.label }} <span style="color:red;">*</span></label>
+                                {{ form.child_birth_certificate }}
+                                {% if form.child_birth_certificate.errors %}<div class="text-danger small mt-1">{{ form.child_birth_certificate.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.grade_applying_for.label }} <span style="color:red;">*</span></label>
+                                {{ form.grade_applying_for }}
+                                {% if form.grade_applying_for.errors %}<div class="text-danger small mt-1">{{ form.grade_applying_for.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{{ form.child_previous_school.label }}</label>
+                                {{ form.child_previous_school }}
+                            </div>
+                        </div>
+
+                        <!-- Parent/Guardian Information -->
+                        <h5 style="color:var(--primary-dark);font-weight:600;margin:30px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--primary-bg);">
+                            <i class="bi bi-people"></i> Parent/Guardian Information
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.parent_full_name.label }} <span style="color:red;">*</span></label>
+                                {{ form.parent_full_name }}
+                                {% if form.parent_full_name.errors %}<div class="text-danger small mt-1">{{ form.parent_full_name.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.parent_relationship.label }} <span style="color:red;">*</span></label>
+                                {{ form.parent_relationship }}
+                                {% if form.parent_relationship.errors %}<div class="text-danger small mt-1">{{ form.parent_relationship.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">{{ form.parent_occupation.label }} <span style="color:red;">*</span></label>
+                                {{ form.parent_occupation }}
+                                {% if form.parent_occupation.errors %}<div class="text-danger small mt-1">{{ form.parent_occupation.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.parent_mobile.label }} <span style="color:red;">*</span></label>
+                                {{ form.parent_mobile }}
+                                {% if form.parent_mobile.errors %}<div class="text-danger small mt-1">{{ form.parent_mobile.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.parent_email.label }} <span style="color:red;">*</span></label>
+                                {{ form.parent_email }}
+                                {% if form.parent_email.errors %}<div class="text-danger small mt-1">{{ form.parent_email.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.parent_nida.label }}</label>
+                                {{ form.parent_nida }}
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <h5 style="color:var(--primary-dark);font-weight:600;margin:30px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--primary-bg);">
+                            <i class="bi bi-geo-alt"></i> Address
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.region.label }} <span style="color:red;">*</span></label>
+                                {{ form.region }}
+                                {% if form.region.errors %}<div class="text-danger small mt-1">{{ form.region.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.district.label }} <span style="color:red;">*</span></label>
+                                {{ form.district }}
+                                {% if form.district.errors %}<div class="text-danger small mt-1">{{ form.district.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.street.label }} <span style="color:red;">*</span></label>
+                                {{ form.street }}
+                                {% if form.street.errors %}<div class="text-danger small mt-1">{{ form.street.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <h5 style="color:var(--primary-dark);font-weight:600;margin:30px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--primary-bg);">
+                            <i class="bi bi-chat-dots"></i> Additional Information
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">{{ form.additional_info.label }}</label>
+                                {{ form.additional_info }}
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-submit">
+                                <i class="bi bi-send"></i> Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

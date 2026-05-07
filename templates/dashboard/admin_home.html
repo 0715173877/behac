@@ -28,7 +28,7 @@
                 <div class="card-body text-center py-3">
                     <i class="fas fa-user-graduate fa-2x mb-2"></i>
                     <h3 class="mb-0">{{ total_students }}</h3>
-                    <small>Students</small>
+                    <small>Pupils</small>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@
     <div class="row g-2 mb-4">
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white"><i class="fas fa-chart-bar"></i> Students by Class</div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-chart-bar"></i> Pupils by Class</div>
                 <div class="card-body">
                     <div class="chart-container">
                         <canvas id="classChart"></canvas>
@@ -184,7 +184,7 @@ new Chart(document.getElementById('classChart'), {
     data: {
         labels: {{ class_labels|safe }},
         datasets: [{
-            label: 'Students',
+            label: 'Pupils',
             data: {{ class_dist|safe }},
             backgroundColor: 'rgba(23, 162, 184, 0.6)',
             borderColor: '#17a2b8',

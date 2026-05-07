@@ -1,0 +1,202 @@
+{% extends 'help/help_base.html' %}
+{% load static %}
+
+{% block help_content %}
+<div class="help-section">
+    <h4><i class="fas fa-user-shield"></i> Admin / Owner Guide</h4>
+    <p class="text-muted">As an Admin or Owner, you have full access to manage the school system. This guide walks you through all the key features.</p>
+
+    <!-- Getting Started -->
+    <div class="help-section">
+        <h4>1. Getting Started</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Log In</strong>
+                <p>Go to the login page and enter your username and password provided by the system administrator.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Dashboard Overview</strong>
+                <p>After logging in, you'll see the Admin Dashboard showing key stats: total pupils, teachers, classes, parents, and revenue summaries.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Navigate the Sidebar</strong>
+                <p>Use the sidebar menu on the left to access different sections. Click the hamburger icon (<i class="fas fa-bars"></i>) on mobile to show/hide it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managing Pupils -->
+    <div class="help-section">
+        <h4>2. Managing Pupils</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>View All Pupils</strong>
+                <p>Click <strong>Pupils</strong> in the sidebar under "Records" to see a list of all enrolled pupils.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add a New Pupil</strong>
+                <p>Click the <strong>Add Pupil</strong> button and fill in the required details (name, date of birth, class, parent info, etc.).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Edit or Delete a Pupil</strong>
+                <p>Click the edit (<i class="fas fa-edit"></i>) or delete (<i class="fas fa-trash"></i>) icons next to any pupil record.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Approve Applications</strong>
+                <p>When parents apply online via the website, their applications appear under <strong>Applications</strong> in the sidebar. Click to review, approve, or reject them. Approved pupils are automatically enrolled.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managing Teachers & Users -->
+    <div class="help-section">
+        <h4>3. Managing Teachers & Users</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Teachers</strong>
+                <p>Click <strong>Teachers</strong> to view, add, or manage teacher profiles. Each teacher can be assigned to specific classes.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Users</strong>
+                <p>Click <strong>Users</strong> to manage system login accounts. You can create accounts for teachers, accountants, and parents, and assign their roles (groups).</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> When creating a parent user, use the parent's email as the username. The default password is <code>parent123</code> — remind parents to change it.
+        </div>
+    </div>
+
+    <!-- Academics -->
+    <div class="help-section">
+        <h4>4. Academics Management</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Classes</strong>
+                <p>Set up class levels (e.g., Standard 1, Standard 2, Form 1, etc.) under <strong>Classes</strong> in the Academics section.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Subjects</strong>
+                <p>Add subjects (Mathematics, English, Science, etc.) and assign them to class levels.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Academic Years & Terms</strong>
+                <p>Set up academic years and terms under <strong>Administration → Academic Years / Terms</strong>. Mark the current year as active.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Timetables</strong>
+                <p>Create class timetables by assigning subjects, teachers, time periods, and days of the week.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finance -->
+    <div class="help-section">
+        <h4>5. Finance Management</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Fee Categories</strong>
+                <p>Create fee categories (e.g., Tuition, Transport, Lunch) under <strong>Finance → Fee Categories</strong>.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Fee Structures</strong>
+                <p>Set the amount for each fee category per class level under <strong>Fee Structures</strong>.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>View Reports</strong>
+                <p>Access financial reports, outstanding balances, and payment summaries from the Finance section.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Behavior & Achievements -->
+    <div class="help-section">
+        <h4>6. Behavior & Achievements</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Behavior Records</strong>
+                <p>Record positive or negative behavior incidents for pupils. These are visible to parents in their dashboard.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Achievements</strong>
+                <p>Award achievements or certificates to pupils for academic excellence, sports, or good conduct.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Django Admin -->
+    <div class="help-section">
+        <h4>7. Django Admin Panel</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Access Admin Panel</strong>
+                <p>Click <strong>Admin Panel</strong> in the sidebar to access the Django admin interface for advanced management.</p>
+            </div>
+        </div>
+        <div class="warning-box">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Caution:</strong> The Django Admin Panel gives you direct access to the database. Be careful when editing or deleting records here.
+        </div>
+    </div>
+
+    <!-- Website -->
+    <div class="help-section">
+        <h4>8. Managing the Public Website</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>View Website</strong>
+                <p>Click <strong>Website</strong> in the sidebar to open the public-facing school website in a new tab.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Update School Info</strong>
+                <p>Go to the Django Admin Panel to update school name, logo, colors, and other settings under the Core app.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

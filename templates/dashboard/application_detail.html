@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header d-flex justify-content-between align-items-center mb-3">
+        <h3><i class="fas fa-file-alt text-behac"></i> Application Details</h3>
+        <a href="{% url 'dashboard:application_list' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Child Information -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-child"></i> Child Information
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <th class="text-muted" style="width:140px;">Full Name</th>
+                            <td>{{ app.child_first_name }} {{ app.child_middle_name }} {{ app.child_last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Date of Birth</th>
+                            <td>{{ app.child_date_of_birth|date:"d/m/Y" }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Gender</th>
+                            <td>{{ app.get_child_gender_display }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Birth Certificate</th>
+                            <td>{{ app.child_birth_certificate|default:"—" }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Grade Applying For</th>
+                            <td><span class="badge bg-info">{{ app.grade_applying_for.name }}</span></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Previous School</th>
+                            <td>{{ app.previous_school|default:"—" }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parent Information -->
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-user"></i> Parent / Guardian Information
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <th class="text-muted" style="width:140px;">Full Name</th>
+                            <td>{{ app.parent_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Mobile</th>
+                            <td>{{ app.parent_mobile }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Email</th>
+                            <td>{{ app.parent_email }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Occupation</th>
+                            <td>{{ app.parent_occupation|default:"—" }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">NIDA</th>
+                            <td>{{ app.parent_nida|default:"—" }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Street</th>
+                            <td>{{ app.street|default:"—" }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status & Actions -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-info-circle"></i> Application Status</span>
+            <span>
+                {% if app.status == 'pending' %}
+                    <span class="badge bg-warning text-dark fs-6">Pending</span>
+                {% elif app.status == 'approved' %}
+                    <span class="badge bg-success fs-6">Approved</span>
+                {% elif app.status == 'rejected' %}
+                    <span class="badge bg-danger fs-6">Rejected</span>
+                {% endif %}
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Submitted:</strong> {{ app.submitted_at|date:"F d, Y H:i" }}</p>
+                    <p><strong>Last Updated:</strong> {{ app.updated_at|date:"F d, Y H:i" }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    {% if app.status == 'pending' %}
+                    <a href="{% url 'dashboard:application_approve' app.pk %}" class="btn btn-success" onclick="return confirm('Approve this application? This will auto-enroll the pupil and create a parent account.')">
+                        <i class="fas fa-check"></i> Approve & Enroll
+                    </a>
+                    <a href="{% url 'dashboard:application_reject' app.pk %}" class="btn btn-danger" onclick="return confirm('Reject this application?')">
+                        <i class="fas fa-times"></i> Reject
+                    </a>
+                    {% elif app.status == 'approved' %}
+                    <div class="alert alert-success mb-0 py-2">
+                        <i class="fas fa-check-circle"></i> This application has been approved. The pupil has been enrolled.
+                    </div>
+                    {% elif app.status == 'rejected' %}
+                    <div class="alert alert-danger mb-0 py-2">
+                        <i class="fas fa-times-circle"></i> This application has been rejected.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

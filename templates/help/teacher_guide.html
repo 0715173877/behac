@@ -1,0 +1,195 @@
+{% extends 'help/help_base.html' %}
+{% load static %}
+
+{% block help_content %}
+<div class="help-section">
+    <h4><i class="fas fa-chalkboard-teacher"></i> Teacher Guide</h4>
+    <p class="text-muted">As a Teacher, you can record results, take attendance, manage assignments, and track pupil behavior. This guide shows you how.</p>
+
+    <!-- Getting Started -->
+    <div class="help-section">
+        <h4>1. Getting Started</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Log In</strong>
+                <p>Go to the login page and enter your username and password provided by the school administrator.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Teacher Dashboard</strong>
+                <p>After logging in, you'll see your Teacher Dashboard showing your classes, today's timetable, recent results, and upcoming assignments.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Navigate the Sidebar</strong>
+                <p>Use the sidebar on the left to access Academics (Results, Attendance, Assignments, Exams, Timetable, Subjects, Classes) and Records (Pupils, Behavior, Achievements).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recording Results -->
+    <div class="help-section">
+        <h4>2. Recording Results</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Results</strong>
+                <p>Click <strong>Results</strong> in the sidebar under "Academics".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add a New Result</strong>
+                <p>Click <strong>Add Result</strong>. Select the pupil, subject, exam, and enter the score. You can also upload results in bulk using a CSV file.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Bulk Upload</strong>
+                <p>Click <strong>Bulk Upload</strong> to upload multiple results at once using a CSV file. Download the sample template first to ensure correct formatting.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Results are visible to parents in their dashboard, so keep them up to date after each exam or test.
+        </div>
+    </div>
+
+    <!-- Taking Attendance -->
+    <div class="help-section">
+        <h4>3. Taking Attendance</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Attendance</strong>
+                <p>Click <strong>Attendance</strong> in the sidebar under "Academics".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Record Attendance</strong>
+                <p>Click <strong>Add Attendance</strong>. Select the class, date, and mark each pupil as Present (P), Absent (A), or Late (L).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>View Attendance History</strong>
+                <p>The attendance list shows all records. You can filter by class, date, or pupil to review attendance patterns.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managing Assignments -->
+    <div class="help-section">
+        <h4>4. Managing Assignments</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Assignments</strong>
+                <p>Click <strong>Assignments</strong> in the sidebar under "Academics".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add an Assignment</strong>
+                <p>Click <strong>Add Assignment</strong>. Enter the title, description, select the class, subject, and set a due date. You can also upload a file (e.g., a PDF worksheet).</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Edit or Delete</strong>
+                <p>Use the edit or delete icons next to any assignment to make changes or remove it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managing Exams -->
+    <div class="help-section">
+        <h4>5. Managing Exams</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Go to Exams</strong>
+                <p>Click <strong>Exams</strong> in the sidebar under "Academics".</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Add an Exam</strong>
+                <p>Click <strong>Add Exam</strong>. Enter the exam name, select the term, subject, class, and set the date and maximum score.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Record Results for Exams</strong>
+                <p>After creating an exam, go to <strong>Results</strong> to record scores for each pupil who took the exam.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Behavior & Achievements -->
+    <div class="help-section">
+        <h4>6. Behavior & Achievements</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Record Behavior</strong>
+                <p>Click <strong>Behavior</strong> under "Records" to log behavior incidents. Select the pupil, choose the type (Positive/Negative), describe the incident, and set the severity.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Award Achievements</strong>
+                <p>Click <strong>Achievements</strong> under "Records" to award achievements to pupils for good performance, sports, or conduct.</p>
+            </div>
+        </div>
+        <div class="tip-box">
+            <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Parents can see both behavior records and achievements in their dashboard, so use these features to keep them informed.
+        </div>
+    </div>
+
+    <!-- Viewing Pupils -->
+    <div class="help-section">
+        <h4>7. Viewing Pupils</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Pupils List</strong>
+                <p>Click <strong>Pupils</strong> under "Records" to view all enrolled pupils. You can search by name or filter by class.</p>
+            </div>
+        </div>
+        <div class="help-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Pupil Details</strong>
+                <p>Click on a pupil's name to view their full profile, including personal info, parent details, and class.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timetable -->
+    <div class="help-section">
+        <h4>8. Viewing Your Timetable</h4>
+        <div class="help-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Your Timetable</strong>
+                <p>Your current day's timetable is shown on the Teacher Dashboard. Click <strong>Timetable</strong> in the sidebar to view the full weekly schedule.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

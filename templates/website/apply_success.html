@@ -1,0 +1,46 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Application Submitted - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE HEADER ====== -->
+<section class="page-header">
+    <div class="container">
+        <h1>Application Submitted</h1>
+    </div>
+</section>
+
+<!-- ====== SUCCESS MESSAGE ====== -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <div class="success-icon">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <h3 style="color:var(--primary-dark);font-weight:600;margin-bottom:15px;">Thank You!</h3>
+                <p style="color:#666;font-size:1.1rem;margin-bottom:30px;">
+                    Your application has been submitted successfully. Our admissions team will review your application and contact you soon.
+                </p>
+                <div style="background:var(--primary-bg);border-radius:16px;padding:25px;margin-bottom:30px;">
+                    <p style="margin-bottom:5px;"><strong>What happens next?</strong></p>
+                    <p style="color:#555;margin-bottom:0;">
+                        We will review your application and contact you via phone or email within 3-5 working days to discuss the next steps.
+                    </p>
+                </div>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{% url 'website_home' %}" class="btn" style="background:var(--primary-dark);color:white;border-radius:25px;padding:12px 30px;">
+                        <i class="bi bi-house"></i> Back to Home
+                    </a>
+                    <a href="{% url 'website_contact' %}" class="btn btn-outline-secondary" style="border-radius:25px;padding:12px 30px;">
+                        <i class="bi bi-telephone"></i> Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

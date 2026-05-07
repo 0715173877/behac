@@ -1,32 +1,22 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-success text-white text-center">
-                    <h4>Behac International Academy</h4>
-                    <small>Payment Receipt</small>
-                </div>
-                <div class="card-body">
-                    <table class="table table-borderless">
-                        <tr><th>Receipt No:</th><td><code>{{ payment.receipt_number }}</code></td></tr>
-                        <tr><th>Student:</th><td>{{ payment.student.full_name }} ({{ payment.student.current_class }})</td></tr>
-                        <tr><th>Fee Category:</th><td>{{ payment.fee_category.name }}</td></tr>
-                        <tr><th>Amount Paid:</th><td><strong>TZS {{ payment.amount_paid|floatformat:2|intcomma }}</strong></td></tr>
-                        <tr><th>Date:</th><td>{{ payment.payment_date }}</td></tr>
-                        <tr><th>Installment:</th><td>{% if payment.installment_month %}Month {{ payment.installment_month }}{% else %}One-time{% endif %}</td></tr>
-                        <tr><th>Notes:</th><td>{{ payment.notes|default:"-" }}</td></tr>
-                    </table>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="{% url 'finance:receipt_pdf' payment.pk %}" class="btn btn-primary" target="_blank">
-                        <i class="fas fa-file-pdf"></i> Download PDF
-                    </a>
-                    <a href="{% url 'finance:payment_list' %}" class="btn btn-secondary">Back</a>
-                </div>
-            </div>
-        </div>
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Receipt</title></head>
+<body style="font-family: Arial;">
+    <div style="text-align:center; margin-bottom:20px;">
+        <img src="https://via.placeholder.com/80?text=Logo" style="height:60px;">
+        <h2>{{ school_info.name|default:"Behac International Academy" }}</h2>
+        <p>“{{ school_info.tagline|default:"For Smart People" }}”</p>
     </div>
-</div>
-{% endblock %}
+    <hr>
+    <h3>Payment Receipt</h3>
+    <p><strong>Receipt No:</strong> {{ payment.receipt_number }}</p>
+    <p><strong>Pupil:</strong> {{ payment.student.full_name }} ({{ payment.student.current_class }})</p>
+    <p><strong>Fee Category:</strong> {{ payment.fee_category.name }}</p>
+    <p><strong>Amount:</strong> {{ payment.amount_paid }} TZS</p>
+    <p><strong>Date:</strong> {{ payment.payment_date }}</p>
+    <p><strong>Month (if recurring):</strong> {% if payment.installment_month %}Month {{ payment.installment_month }}{% else %}One‑time{% endif %}</p>
+    <p><strong>Notes:</strong> {{ payment.notes|default:"-" }}</p>
+    <hr>
+    <p>Thank you for your payment.</p>
+</body>
+</html>

@@ -1,0 +1,207 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ====== HERO SECTION (Slideshow) ====== -->
+<section class="hero-section" id="heroSection">
+    {% if hero_slides %}
+        {% for slide in hero_slides %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}" style="background-image: url('{{ slide.image.url }}');">
+            <div class="hero-overlay"></div>
+        </div>
+        {% endfor %}
+    {% elif school_info.hero_image %}
+        <div class="hero-slide active" style="background-image: url('{{ school_info.hero_image.url }}');">
+            <div class="hero-overlay"></div>
+        </div>
+    {% elif default_hero_images %}
+        {% for img_url in default_hero_images %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}" style="background-image: url('{{ img_url }}');">
+            <div class="hero-overlay"></div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="hero-slide active" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));">
+            <div class="hero-overlay" style="background: transparent;"></div>
+        </div>
+    {% endif %}
+
+    <div class="hero-content">
+        <h1 id="heroTitle" data-en="Welcome to {{ school_info.name|default:'Behac International Academy' }}" data-sw="Karibu {{ school_info.name|default:'Behac International Academy' }}">Welcome to {{ school_info.name|default:"Behac International Academy" }}</h1>
+        <p id="heroSubtitle" data-en="{{ school_info.motto|default:'Empowering Minds, Shaping Futures — Excellence in Education' }}" data-sw="{{ school_info.motto|default:'Kuwawezesha Akili, Kuunda Mustakabali — Ubora katika Elimu' }}">{{ school_info.motto|default:"Empowering Minds, Shaping Futures — Excellence in Education" }}</p>
+        <div class="hero-buttons">
+            <a href="{% url 'website_about' %}" class="btn btn-light" data-en="Learn More" data-sw="Jifunze Zaidi">Learn More</a>
+            <a href="{% url 'website_apply' %}" class="btn btn-outline-light" data-en="Apply Now" data-sw="Omba Sasa">Apply Now</a>
+            <a href="{% url 'website_contact' %}" class="btn btn-outline-light" data-en="Contact Us" data-sw="Wasiliana Nasi">Contact Us</a>
+        </div>
+    </div>
+    {% if hero_slides|length > 1 or default_hero_images %}
+    <div class="hero-dots">
+        {% if hero_slides %}
+            {% for slide in hero_slides %}
+            <span class="hero-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        {% elif default_hero_images %}
+            {% for img_url in default_hero_images %}
+            <span class="hero-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+
+    // Fallback for broken hero images
+    slides.forEach(function(slide) {
+        var bg = slide.style.backgroundImage;
+        if (bg && bg !== 'none') {
+            var img = new Image();
+            var url = bg.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+            img.onerror = function() {
+                slide.style.backgroundImage = 'none';
+                slide.style.background = 'linear-gradient(135deg, #1B5E20, #4CAF50)';
+            };
+            img.src = url;
+        }
+    });
+
+
+    {% if hero_slides %}
+    const slideData = [
+        {% for slide in hero_slides %}
+        {
+            title: "{{ slide.title|escapejs|default:'' }}",
+            subtitle: "{{ slide.subtitle|escapejs|default:'' }}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+    {% else %}
+    const slideData = [];
+    {% endif %}
+    const defaultTitle = "Welcome to {{ school_info.name|default:'Behac International Academy' }}";
+    const defaultSubtitle = "{{ school_info.motto|default:'Empowering Minds, Shaping Futures — Excellence in Education' }}";
+    let currentIndex = 0;
+    let interval;
+
+    function goToSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === index);
+        });
+        dots.forEach((d, i) => {
+            d.classList.toggle('active', i === index);
+        });
+        currentIndex = index;
+        // Update text if slide has custom title/subtitle
+        if (slideData.length > 0 && slideData[index]) {
+            heroTitle.textContent = slideData[index].title || defaultTitle;
+            heroSubtitle.textContent = slideData[index].subtitle || defaultSubtitle;
+        }
+    }
+
+    function nextSlide() {
+        const next = (currentIndex + 1) % slides.length;
+        goToSlide(next);
+    }
+
+    // Dot click navigation
+    dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.index);
+            goToSlide(idx);
+            // Reset timer
+            clearInterval(interval);
+            interval = setInterval(nextSlide, 5000);
+        });
+    });
+
+    // Auto-advance if more than 1 slide
+    if (slides.length > 1) {
+        interval = setInterval(nextSlide, 5000);
+    }
+});
+</script>
+
+<!-- ====== FEATURES (Dynamic) ====== -->
+{% if features %}
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2 data-en="Why Choose Us?" data-sw="Kwa Nini Tuchague Sisi?">Why Choose Us?</h2>
+            <p data-en="We are committed to providing a holistic education that nurtures every child's potential." data-sw="Tumejitolea kutoa elimu kamili inayokuza uwezo wa kila mtoto.">We are committed to providing a holistic education that nurtures every child's potential.</p>
+        </div>
+        <div class="row g-4">
+            {% for feature in features %}
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon"><i class="bi {{ feature.icon }}"></i></div>
+                    <h5>{{ feature.title }}</h5>
+                    <p>{{ feature.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== LATEST NEWS ====== -->
+{% if latest_news %}
+<section class="section bg-soft">
+    <div class="container">
+        <div class="section-title">
+            <h2 data-en="Latest News" data-sw="Habari Mpya">Latest News</h2>
+            <p data-en="Stay updated with the latest happenings at our school." data-sw="Endelea kupata habari za hivi punde shuleni kwetu.">Stay updated with the latest happenings at our school.</p>
+        </div>
+        <div class="row g-4">
+            {% for news in latest_news %}
+            <div class="col-md-4">
+                <div class="news-card">
+                    <div class="news-img">
+                        {% if news.image %}
+                            <img src="{{ news.image.url }}" alt="{{ news.title }}">
+                        {% else %}
+                            <i class="bi bi-newspaper"></i>
+                        {% endif %}
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date"><i class="bi bi-calendar3"></i> {{ news.published_at|date:"F j, Y" }}</div>
+                        <h5>{{ news.title }}</h5>
+                        <p>{{ news.content|truncatewords:25 }}</p>
+                        <a href="{% url 'website_news_detail' news.pk %}" class="btn btn-sm" style="background:var(--primary-dark);color:white;border-radius:25px;padding:8px 20px;" data-en="Read More" data-sw="Soma Zaidi">
+                            Read More <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'website_news' %}" class="btn" style="background:var(--primary-dark);color:white;border-radius:25px;padding:12px 30px;" data-en="View All News" data-sw="Tazama Habari Zote">
+                View All News <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ====== CTA ====== -->
+<section class="section" style="background:linear-gradient(135deg, var(--primary-dark), var(--primary-light));color:white;text-align:center;">
+    <div class="container">
+        <h2 style="font-weight:700;margin-bottom:15px;" data-en="Ready to Join Our School?" data-sw="Uko Tayari Kujiunga Shuleni Kwetu?">Ready to Join Our School?</h2>
+        <p style="opacity:0.9;max-width:600px;margin:0 auto 30px;" data-en="Give your child the gift of quality education. Apply today and become part of our vibrant learning community." data-sw="Mpe mtoto wako zawadi ya elimu bora. Omba leo na uwe sehemu ya jamii yetu ya kujifunza.">Give your child the gift of quality education. Apply today and become part of our vibrant learning community.</p>
+        <a href="{% url 'website_apply' %}" class="btn btn-light btn-lg" style="border-radius:30px;padding:15px 40px;font-weight:600;" data-en="Apply Now" data-sw="Omba Sasa">
+            Apply Now <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</section>
+
+{% endblock %}
+
+

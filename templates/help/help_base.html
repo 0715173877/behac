@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+.help-sidebar {
+    position: sticky;
+    top: 80px;
+}
+.help-sidebar .nav-link {
+    padding: 8px 15px;
+    color: #555;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+.help-sidebar .nav-link:hover,
+.help-sidebar .nav-link.active {
+    background-color: var(--behac-bg);
+    color: var(--behac-dark);
+}
+.help-sidebar .nav-link i {
+    width: 20px;
+    color: var(--behac-light);
+}
+.help-section {
+    margin-bottom: 2rem;
+}
+.help-section h4 {
+    color: var(--behac-dark);
+    border-bottom: 2px solid var(--behac-bg);
+    padding-bottom: 8px;
+    margin-bottom: 1rem;
+}
+.help-step {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 1rem;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid var(--behac-light);
+}
+.help-step .step-number {
+    background: var(--behac-dark);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+.help-step .step-content {
+    flex: 1;
+}
+.help-step .step-content strong {
+    display: block;
+    margin-bottom: 3px;
+}
+.help-step .step-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+.help-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+.help-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.help-card .card-body {
+    padding: 1.5rem;
+}
+.help-card .icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+.tip-box {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin: 1rem 0;
+}
+.tip-box i {
+    color: #856404;
+    margin-right: 8px;
+}
+.warning-box {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin: 1rem 0;
+}
+.warning-box i {
+    color: #721c24;
+    margin-right: 8px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-question-circle text-behac"></i> {{ page_title }}</h2>
+        <a href="javascript:window.print()" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-print"></i> Print / Save as PDF
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3">
+            <div class="help-sidebar">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <nav class="nav flex-column">
+                            <a class="nav-link {% if active_tab == 'overview' %}active{% endif %}" href="{% url 'dashboard:help_index' %}">
+                                <i class="fas fa-home"></i> Overview
+                            </a>
+                            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' %}
+                            <a class="nav-link {% if active_tab == 'admin' %}active{% endif %}" href="{% url 'dashboard:help_admin' %}">
+                                <i class="fas fa-user-shield"></i> Admin Guide
+                            </a>
+                            {% endif %}
+                            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Teacher' in user_groups|join:', ' %}
+                            <a class="nav-link {% if active_tab == 'teacher' %}active{% endif %}" href="{% url 'dashboard:help_teacher' %}">
+                                <i class="fas fa-chalkboard-teacher"></i> Teacher Guide
+                            </a>
+                            {% endif %}
+                            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Accountant' in user_groups|join:', ' %}
+                            <a class="nav-link {% if active_tab == 'accountant' %}active{% endif %}" href="{% url 'dashboard:help_accountant' %}">
+                                <i class="fas fa-calculator"></i> Accountant Guide
+                            </a>
+                            {% endif %}
+                            {% if user.is_superuser or 'Admin' in user_groups|join:', ' or 'Owner' in user_groups|join:', ' or 'Parent' in user_groups|join:', ' %}
+                            <a class="nav-link {% if active_tab == 'parent' %}active{% endif %}" href="{% url 'dashboard:help_parent' %}">
+                                <i class="fas fa-user-friends"></i> Parent Guide
+                            </a>
+                            {% endif %}
+                        </nav>
+
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-body text-center py-3">
+                        <small class="text-muted">Need more help?</small><br>
+                        <small>Contact the school administrator</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            {% block help_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

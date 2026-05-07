@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ school_info.name|default:"Behac International Academy" }}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-dark: {{ school_info.primary_dark|default:"#1B5E20" }};
+            --primary-light: {{ school_info.primary_light|default:"#4CAF50" }};
+            --primary-bg: {{ school_info.primary_bg|default:"#E8F5E9" }};
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* ====== TOP NAVBAR ====== */
+        .topbar {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            padding: 12px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        .topbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        .topbar-brand:hover { color: rgba(255,255,255,0.9); }
+        .topbar-brand img { height: 40px; border-radius: 50%; }
+
+        /* ====== NAV LINKS ====== */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .nav-links a.portal-btn {
+            background: white;
+            color: var(--primary-dark);
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 25px;
+        }
+        .nav-links a.portal-btn:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile toggle */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ====== HERO SECTION (Slideshow) ====== */
+        .hero-section {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        .hero-slide.active {
+            opacity: 1;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(27,94,32,0.55), rgba(76,175,80,0.45));
+        }
+        .hero-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.15);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            background: rgba(0,0,0,0.25);
+            padding: 40px 50px;
+            border-radius: 20px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-section h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+        .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .hero-buttons .btn {
+            padding: 14px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .hero-buttons .btn-light {
+            background: white;
+            color: var(--primary-dark);
+            border: none;
+        }
+        .hero-buttons .btn-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .hero-buttons .btn-outline-light:hover {
+            background: white;
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Hero navigation dots */
+        .hero-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 3;
+        }
+        .hero-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.6);
+        }
+        .hero-dot.active {
+            background: white;
+            border-color: white;
+            transform: scale(1.2);
+        }
+        .hero-dot:hover {
+            background: rgba(255,255,255,0.7);
+        }
+
+        /* ====== PAGE HEADER ====== */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            padding: 100px 0 50px;
+            text-align: center;
+            color: white;
+        }
+        .page-header h1 { font-size: 2.5rem; font-weight: 700; }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        /* ====== SECTIONS ====== */
+        .section { padding: 80px 0; }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+
+        /* ====== CARDS ====== */
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .feature-card .icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+        }
+        .feature-card h5 { font-weight: 600; margin-bottom: 12px; color: #333; }
+        .feature-card p { color: #666; font-size: 0.95rem; }
+
+        /* ====== NEWS CARD ====== */
+        .news-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+        }
+        .news-card .news-img {
+            height: 200px;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-light);
+            overflow: hidden;
+        }
+        .news-card .news-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-card .news-body { padding: 20px; }
+        .news-card .news-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .news-card .news-body h5 { font-weight: 600; margin-bottom: 10px; }
+        .news-card .news-body p { color: #666; font-size: 0.95rem; }
+
+        /* ====== FOOTER ====== */
+        .footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.85);
+            padding: 50px 0 30px;
+        }
+        .footer h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+        .footer a:hover { color: white; }
+        .footer .social-links { display: flex; gap: 12px; }
+        .footer .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0;
+            transition: all 0.3s;
+        }
+        .footer .social-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .portal-footer-btn {
+            border-radius: 25px !important;
+            padding: 10px 25px !important;
+            font-weight: 600 !important;
+            background: white !important;
+            color: var(--primary-dark) !important;
+            border: 2px solid white !important;
+            transition: all 0.3s ease !important;
+        }
+        .portal-footer-btn:hover {
+            background: transparent !important;
+            color: white !important;
+            border-color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* ====== FORM STYLES ====== */
+        .form-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .form-section .form-label { font-weight: 500; color: #444; }
+        .form-section .form-control,
+        .form-section .form-select {
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1.5px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        .form-section .form-control:focus,
+        .form-section .form-select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+        }
+        .form-section .btn-submit {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+        }
+        .form-section .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* ====== CONTACT INFO ====== */
+        .contact-info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: all 0.3s;
+        }
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+        }
+        .contact-info-card .icon {
+            width: 55px;
+            height: 55px;
+            background: var(--primary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        .contact-info-card h6 { font-weight: 600; margin-bottom: 8px; }
+        .contact-info-card p { color: #666; margin-bottom: 0; }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 991px) {
+            .mobile-toggle { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-dark);
+                flex-direction: column;
+                padding: 15px;
+                gap: 5px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+            .nav-links.show { display: flex; }
+            .nav-links a { padding: 12px 16px; width: 100%; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .hero-section p { font-size: 1rem; }
+            .page-header h1 { font-size: 2rem; }
+            .section { padding: 50px 0; }
+            .form-section { padding: 25px; }
+        }
+        @media (max-width: 576px) {
+            .hero-section h1 { font-size: 1.8rem; }
+            .hero-buttons .btn { width: 100%; }
+            .hero-content { padding: 25px 20px; }
+        }
+
+
+        /* ====== MISC ====== */
+        .bg-soft { background-color: var(--primary-bg); }
+        .text-primary-dark { color: var(--primary-dark); }
+        .about-content p { line-height: 1.8; color: #555; font-size: 1.05rem; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--primary-dark); }
+        .stat-label { color: #666; font-weight: 500; }
+        .success-icon {
+            width: 80px; height: 80px;
+            background: var(--primary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- ====== TOP NAVBAR ====== -->
+    <nav class="topbar">
+        <div class="container">
+            <a href="{% url 'website_home' %}" class="topbar-brand">
+                {% if school_info.logo %}
+                    <img src="{{ school_info.logo.url }}" alt="Logo">
+                {% else %}
+                    <i class="bi bi-mortarboard-fill"></i>
+                {% endif %}
+                {{ school_info.name|default:"Behac International Academy" }}
+            </a>
+            <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="nav-links">
+                <a href="{% url 'website_home' %}" class="{% if active_page == 'home' %}active{% endif %}" data-en="Home" data-sw="Nyumbani">Home</a>
+                <a href="{% url 'website_about' %}" class="{% if active_page == 'about' %}active{% endif %}" data-en="About" data-sw="Kuhusu">About</a>
+                <a href="{% url 'website_apply' %}" class="{% if active_page == 'apply' %}active{% endif %}" data-en="Admissions" data-sw="Udahili">Admissions</a>
+                <a href="{% url 'website_news' %}" class="{% if active_page == 'news' %}active{% endif %}" data-en="News" data-sw="Habari">News</a>
+                <a href="{% url 'website_contact' %}" class="{% if active_page == 'contact' %}active{% endif %}" data-en="Contact" data-sw="Wasiliana">Contact</a>
+                <a href="#" id="langToggle" class="portal-btn" style="min-width:45px;text-align:center;font-weight:700;">SW</a>
+                <a href="{% url 'login' %}" class="portal-btn" data-en="Portal" data-sw="Lango"><i class="bi bi-box-arrow-in-right"></i> Portal</a>
+            </div>
+
+
+        </div>
+    </nav>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    {% block content %}{% endblock %}
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5><i class="bi bi-mortarboard-fill"></i> {{ school_info.name|default:"Behac International Academy" }}</h5>
+                    <p style="opacity:0.8; line-height:1.7;" data-en="Providing quality education and nurturing future leaders since our establishment." data-sw="Kutoa elimu bora na kuwaandaa viongozi wa kesho tangu kuanzishwa kwetu.">
+                        {% if school_info.motto %}"{{ school_info.motto }}"{% endif %}
+                        Providing quality education and nurturing future leaders since our establishment.
+                    </p>
+
+                    <div class="social-links">
+                        {% if contact_info.facebook_url %}<a href="{{ contact_info.facebook_url }}" title="Facebook" target="_blank"><i class="bi bi-facebook"></i></a>{% endif %}
+                        {% if contact_info.instagram_url %}<a href="{{ contact_info.instagram_url }}" title="Instagram" target="_blank"><i class="bi bi-instagram"></i></a>{% endif %}
+                        {% if contact_info.twitter_url %}<a href="{{ contact_info.twitter_url }}" title="Twitter" target="_blank"><i class="bi bi-twitter-x"></i></a>{% endif %}
+                        {% if contact_info.whatsapp_url %}<a href="{{ contact_info.whatsapp_url }}" title="WhatsApp" target="_blank"><i class="bi bi-whatsapp"></i></a>{% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h5 data-en="Quick Links" data-sw="Viungo Haraka">Quick Links</h5>
+                    <a href="{% url 'website_home' %}" data-en="Home" data-sw="Nyumbani">Home</a>
+                    <a href="{% url 'website_about' %}" data-en="About Us" data-sw="Kuhusu Sisi">About Us</a>
+                    <a href="{% url 'website_apply' %}" data-en="Admissions" data-sw="Udahili">Admissions</a>
+                    <a href="{% url 'website_news' %}" data-en="News" data-sw="Habari">News</a>
+                    <a href="{% url 'website_contact' %}" data-en="Contact" data-sw="Wasiliana">Contact</a>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5 data-en="Contact Info" data-sw="Maelezo ya Mawasiliano">Contact Info</h5>
+
+                    <a href="#"><i class="bi bi-geo-alt"></i> {{ contact_info.address|default:"Dar es Salaam, Tanzania" }}</a>
+                    <a href="tel:{{ contact_info.phone_1|default:'+255712345678'|cut:' ' }}"><i class="bi bi-telephone"></i> {{ contact_info.phone_1|default:"+255 712 345 678" }}</a>
+                    <a href="mailto:{{ contact_info.email_1|default:'info@behac.ac.tz' }}"><i class="bi bi-envelope"></i> {{ contact_info.email_1|default:"info@behac.ac.tz" }}</a>
+                    <a href="#"><i class="bi bi-clock"></i> {{ contact_info.office_hours|default:"Mon - Fri: 7:30 AM - 4:00 PM" }}</a>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5 data-en="Portal Access" data-sw="Lango la Portal">Portal Access</h5>
+                    <p style="opacity:0.8; font-size:0.9rem;" data-en="Parents and staff can access the school portal for updates, results, and more." data-sw="Wazazi na wafanyakazi wanaweza kufikia portal ya shule kwa taarifa, matokeo, na mengine.">Parents and staff can access the school portal for updates, results, and more.</p>
+                    <a href="{% url 'login' %}" class="btn btn-light btn-sm portal-footer-btn" data-en="Login to Portal" data-sw="Ingia kwenye Portal">
+                        <i class="bi bi-box-arrow-in-right"></i> Login to Portal
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; {% now "Y" %} {{ school_info.name|default:"Behac International Academy" }}. <span data-en="All rights reserved." data-sw="Haki zote zimehifadhiwa.">All rights reserved.</span>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('show');
+            });
+        });
+
+        // ====== LANGUAGE TOGGLE (English / Swahili) ======
+        (function() {
+            const toggleBtn = document.getElementById('langToggle');
+            if (!toggleBtn) return;
+
+            // Determine initial language from localStorage
+            let currentLang = localStorage.getItem('behac_lang') || 'en';
+            applyLanguage(currentLang);
+            updateToggleButton(currentLang);
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentLang = currentLang === 'en' ? 'sw' : 'en';
+                localStorage.setItem('behac_lang', currentLang);
+                applyLanguage(currentLang);
+                updateToggleButton(currentLang);
+            });
+
+            function applyLanguage(lang) {
+                // Select all elements with data-en and data-sw attributes
+                document.querySelectorAll('[data-en][data-sw]').forEach(el => {
+                    const text = el.getAttribute('data-' + lang);
+                    if (text) {
+                        // Preserve inner HTML if it contains icons or other HTML
+                        // Only replace text content, not child elements
+                        const childNodes = el.childNodes;
+                        let textNodes = [];
+                        childNodes.forEach(node => {
+                            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                textNodes.push(node);
+                            }
+                        });
+                        if (textNodes.length > 0) {
+                            // Replace the first text node's content
+                            textNodes[0].textContent = ' ' + text + ' ';
+                        } else {
+                            el.textContent = text;
+                        }
+                    }
+                });
+            }
+
+            function updateToggleButton(lang) {
+                toggleBtn.textContent = lang === 'en' ? 'SW' : 'EN';
+            }
+        })();
+    </script>
+    {% block extra_scripts %}{% endblock %}
+
+</body>
+</html>

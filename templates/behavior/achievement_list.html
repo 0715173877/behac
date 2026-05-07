@@ -8,7 +8,7 @@
     <div class="card">
         <div class="card-body"><form method="get" class="row g-2 mb-3">
     <div class="col-md-8">
-        <input type="text" name="q" class="form-control" placeholder="Search by title or student name..." value="{{ q }}">
+        <input type="text" name="q" class="form-control" placeholder="Search by title or pupil name..." value="{{ q }}">
     </div>
     <div class="col-md-4">
         <button type="submit" class="btn btn-behac w-100"><i class="fas fa-search"></i> Search</button>
@@ -27,7 +27,7 @@
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
-                        <tr><th>Student</th><th>Title</th><th>Date</th><th>Description</th><th>Actions</th></tr>
+                        <tr><th>Pupil</th><th>Title</th><th>Date</th><th>Description</th><th>Actions</th></tr>
                     </thead>
                     <tbody>
                         {% for a in achievements %}

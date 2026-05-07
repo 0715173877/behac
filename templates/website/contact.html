@@ -1,0 +1,76 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- ====== PAGE HEADER ====== -->
+<section class="page-header">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you. Get in touch with us today.</p>
+    </div>
+</section>
+
+<!-- ====== CONTACT SECTION ====== -->
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-geo-alt"></i></div>
+                    <h6>Our Location</h6>
+                    <p>{{ contact_info.address|default:"Dar es Salaam, Tanzania" }}</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-telephone"></i></div>
+                    <h6>Phone</h6>
+                    <p>{{ contact_info.phone_1|default:"+255 712 345 678" }}{% if contact_info.phone_2 %}<br>{{ contact_info.phone_2 }}{% endif %}</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-envelope"></i></div>
+                    <h6>Email</h6>
+                    <p>{{ contact_info.email_1|default:"info@behac.ac.tz" }}{% if contact_info.email_2 %}<br>{{ contact_info.email_2 }}{% endif %}</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-clock"></i></div>
+                    <h6>Office Hours</h6>
+                    <p>{{ contact_info.office_hours|default:"Monday - Friday: 7:30 AM - 4:00 PM" }}{% if contact_info.saturday_hours %}<br>{{ contact_info.saturday_hours }}{% endif %}</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-whatsapp"></i></div>
+                    <h6>WhatsApp</h6>
+                    <p>{{ contact_info.whatsapp|default:"+255 712 345 678" }}</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-info-card">
+                    <div class="icon"><i class="bi bi-globe"></i></div>
+                    <h6>Visit Us</h6>
+                    <p>We welcome visits during school hours. Please call ahead to schedule.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="mt-5" style="background:var(--primary-bg);border-radius:16px;padding:60px 20px;text-align:center;">
+            <i class="bi bi-map" style="font-size:3rem;color:var(--primary-light);margin-bottom:15px;"></i>
+            <h5 style="color:var(--primary-dark);font-weight:600;">Find Us</h5>
+            <p style="color:#666;">{{ contact_info.address|default:"Dar es Salaam, Tanzania" }}</p>
+            <a href="{{ contact_info.google_maps_url|default:'https://maps.google.com/?q=Dar+es+Salaam+Tanzania' }}" target="_blank" class="btn" style="background:var(--primary-dark);color:white;border-radius:25px;padding:12px 30px;">
+                <i class="bi bi-box-arrow-up-right"></i> Open in Google Maps
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
