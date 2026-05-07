@@ -303,7 +303,8 @@
                 <a class="nav-link {% if '/finance/dashboard/' in request.path %}active{% endif %}" href="{% url 'finance:accountant_dashboard' %}"><i class="fas fa-chart-pie"></i> Finance</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if '/finance/reports/' in request.path %}active{% endif %}" href="{% url 'finance:payment_report' %}"><i class="fas fa-file-invoice"></i> Reports</a>
+                <a class="nav-link {% if '/finance/reports/' in request.path and not '/finance/reports/outstanding/' in request.path %}active{% endif %}" href="{% url 'finance:payment_report' %}"><i class="fas fa-file-invoice"></i> Reports</a>
+
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if '/finance/reports/outstanding/' in request.path %}active{% endif %}" href="{% url 'finance:outstanding_report' %}"><i class="fas fa-exclamation-triangle"></i> Outstanding</a>
